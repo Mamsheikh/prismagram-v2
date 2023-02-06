@@ -4,6 +4,7 @@ import { getSession, signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "../utils/api";
 import Auth from "../components/Auth";
+import Feed from "../components/Home";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -22,7 +23,7 @@ const Home: NextPage = () => {
       </Head>
       <div>
         {session?.user?.username ? (
-          <div>feed</div>
+          <Feed session={session} />
         ) : (
           <Auth session={session} reloadSession={reloadSession} />
         )}
