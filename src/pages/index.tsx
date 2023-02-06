@@ -1,6 +1,5 @@
-import { NextPageContext, type NextPage } from "next";
+import type { NextPageContext, NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "../utils/api";
@@ -8,7 +7,7 @@ import Auth from "../components/Auth";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-
+  console.log({ session });
   const reloadSession = () => {
     const event = new Event("visibilitychange");
     document.dispatchEvent(event);
