@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   AiOutlineCompass,
   AiOutlinePlusSquare,
@@ -17,6 +17,7 @@ import {
 } from "react-icons/ai";
 import { BsInstagram, BsFillSunFill } from "react-icons/bs";
 import { MdNightlight } from "react-icons/md";
+import CreatePostModal from "../Home/Posts/CreatePostModal";
 //   import { useRecoilState } from 'recoil';
 //   import { postState } from '../../atoms/addPostState';
 //   import { userState } from '../../atoms/userState';
@@ -27,6 +28,7 @@ import { MdNightlight } from "react-icons/md";
 
 const Header = () => {
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   // const { theme, setTheme } = useTheme();
   // const [addPost, setAddPost] = useRecoilState(postState);
@@ -97,7 +99,7 @@ const Header = () => {
                 </div> */}
 
               <AiOutlinePlusSquare
-                onClick={() => console.log("hello")}
+                onClick={() => setIsOpen(true)}
                 className="navBtn"
               />
               <Link href="/explore">
@@ -117,6 +119,7 @@ const Header = () => {
           )}
         </div>
       </div>
+      {isOpen && <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} />}
     </header>
   );
 };
