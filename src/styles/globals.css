@@ -11,6 +11,10 @@
     @apply hidden h-6 w-6 cursor-pointer text-gray-900 transition-all duration-150 ease-out hover:scale-125 dark:text-white md:inline-flex;
   }
 
+  .mobileNavBtn {
+    @apply h-6 w-6 cursor-pointer text-gray-900 transition-all duration-150 ease-out hover:scale-125 dark:text-white md:inline-flex;
+  }
+
   .postBtn {
     @apply h-7 cursor-pointer transition-all duration-150 ease-out hover:scale-125 dark:text-white;
   }

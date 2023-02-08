@@ -5,18 +5,14 @@
 //     SunIcon,
 //   } from '@heroicons/react/outline';
 import { useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import {
   AiOutlineCompass,
-  AiOutlinePlusSquare,
   AiOutlineHome,
   AiOutlineMenu,
+  AiOutlinePlusSquare,
 } from "react-icons/ai";
-import { BsInstagram, BsFillSunFill } from "react-icons/bs";
-import { MdNightlight } from "react-icons/md";
+import { BsFillSunFill, BsInstagram } from "react-icons/bs";
 import CreatePostModal from "../Home/Posts/CreatePostModal";
 //   import { useRecoilState } from 'recoil';
 //   import { postState } from '../../atoms/addPostState';
@@ -26,24 +22,14 @@ import CreatePostModal from "../Home/Posts/CreatePostModal";
 //   import Dropdown from '../Dropdown';
 //   import Search from '../Search';
 
-const Header = () => {
+interface HeaderProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  openModal: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal }) => {
   const { data: session } = useSession();
-  const [isOpen, setIsOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  // const { theme, setTheme } = useTheme();
-  // const [addPost, setAddPost] = useRecoilState(postState);
-  // const router = useRouter();
-  // const { data } = useMeQuery({
-  //   errorPolicy: 'ignore',
-  // });
-
-  // const [viewer, setViewer] = useRecoilState(userState);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     setViewer(data.me);
-  //   }
-  // }, [data]);
 
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black">
@@ -98,16 +84,12 @@ const Header = () => {
                   </Link>
                 </div> */}
 
-              <AiOutlinePlusSquare
-                onClick={() => setIsOpen(true)}
-                className="navBtn"
-              />
+              <AiOutlinePlusSquare onClick={openModal} className="navBtn" />
               <Link href="/explore">
                 <AiOutlineCompass className="navBtn" />
               </Link>
 
               {/* <Dropdown id={data?.me?.id} image={data?.me?.image} /> */}
-              {/* {addPost && <AddPostModal user={data?.me} />} */}
             </>
           ) : (
             <Link
@@ -119,7 +101,7 @@ const Header = () => {
           )}
         </div>
       </div>
-      {isOpen && <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+      <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </header>
   );
 };
