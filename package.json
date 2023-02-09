@@ -25,6 +25,7 @@
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-file-drop": "^3.1.6",
     "react-icons": "^4.7.1",
     "superjson": "1.9.1",
     "zod": "^3.19.1"

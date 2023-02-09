@@ -25,6 +25,7 @@ const Home: NextPage = () => {
         {session?.user?.username ? (
           <Feed session={session} />
         ) : (
+          // <div>feed</div>
           <Auth session={session} reloadSession={reloadSession} />
         )}
       </div>
