@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -15,6 +16,7 @@ import { MAX_FILE_SIZE } from "../../../server/api/routers/user";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
+import { api } from "../../../utils/api";
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -36,6 +38,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 }) => {
   const [file, setFile] = useState<File | undefined>();
   const [error, setError] = useState("");
+  const [caption, setCaption] = useState("");
   const [preview, setPreview] = useState("");
   const [isFileNearBy, setIsFileNearBy] = useState<boolean>(false);
   const [isFileOver, setIsFileOver] = useState(false);
@@ -86,12 +89,57 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
     setPreview("");
     closeModal();
   }
-  // const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files?.[0]) return setError("No file selected");
-  //   if (e.target.files[0].size > MAX_FILE_SIZE) return setError("File too big");
-  //   // const ob
-  //   // setInput((prev) => ({ ...prev, file: e.target.files![0] }));
-  // };
+
+  const { mutateAsync: createPresignedUrl } =
+    api.user.createPresignedUrl.useMutation();
+  const { mutateAsync: createPost } = api.user.createPost.useMutation();
+
+  const handleImgUpload = async () => {
+    // const { file } = input
+    if (!file) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { url, fields, key } = await createPresignedUrl({
+      fileType: file.type,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = {
+      ...fields,
+      "Content-Type": file.type,
+      file,
+    };
+
+    const formData = new FormData();
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value as any);
+    });
+
+    await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    return key;
+  };
+
+  const handleCreatePost = async () => {
+    const key = await handleImgUpload();
+    if (!key) throw new Error("No key");
+
+    await createPost({
+      caption,
+      imageKey: key,
+    });
+
+    // refetch()
+
+    // reset
+    // setInput(initialInput)
+    setPreview("");
+  };
 
   useEffect(() => {
     // create the preview
@@ -174,6 +222,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                       onDragOver={() => setIsFileOver(true)}
                       onDragLeave={() => setIsFileOver(false)}
                       onDrop={(files) => setFile(files![0])}
+                      // frame={}
                     >
                       <div
                         className={
@@ -206,11 +255,22 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                           <textarea
                             className="h-full w-full resize-none  border-0 text-sm text-gray-900 focus:ring-0  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 "
                             placeholder="Write a caption..."
+                            value={caption}
+                            onChange={(e) => setCaption(e.target.value)}
                           />
                         </div>
                         <div className="flex items-center justify-between">
                           <BsEmojiSmile className="cursor-pointer text-gray-600" />
                           <span className="text-xs text-gray-600">0/200</span>
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                          <button
+                            type="button"
+                            onClick={handleCreatePost}
+                            className="mr-2 mb-2 rounded-lg bg-gradient-to-br from-green-400 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800"
+                          >
+                            Share
+                          </button>
                         </div>
                       </div>
                     </div>
