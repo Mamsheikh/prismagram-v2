@@ -204,7 +204,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                         </div>
                         <div className="h-1/2">
                           <textarea
-                            className="h-full w-full  border-0 text-sm text-gray-900 focus:ring-0  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 "
+                            className="h-full w-full resize-none  border-0 text-sm text-gray-900 focus:ring-0  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 "
                             placeholder="Write a caption..."
                           />
                         </div>
