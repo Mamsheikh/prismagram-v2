@@ -39,6 +39,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [preview, setPreview] = useState("");
   const [isFileNearBy, setIsFileNearBy] = useState<boolean>(false);
   const [isFileOver, setIsFileOver] = useState(false);
+  const [close, setClose] = useState(false);
   let extraClasses = "";
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,6 +73,19 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
     setIsOpen(false);
   }
 
+  function closeDiscardModal() {
+    setClose(false);
+  }
+
+  function openDiscardModal() {
+    setClose(true);
+  }
+
+  function discard() {
+    setFile(undefined);
+    setPreview("");
+    closeModal();
+  }
   // const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
   //   if (!e.target.files?.[0]) return setError("No file selected");
   //   if (e.target.files[0].size > MAX_FILE_SIZE) return setError("File too big");
@@ -134,10 +148,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                       <div className="flex items-center justify-start">
                         <AiOutlineArrowLeft
                           className="cursor-pointer"
-                          onClick={() => {
-                            setFile(undefined);
-                            setPreview("");
-                          }}
+                          onClick={openDiscardModal}
                         />
                       </div>
                     )}
@@ -146,7 +157,12 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     </span>
                     <IoMdClose
                       className="h-5 w-5 cursor-pointer text-gray-600"
-                      onClick={closeModal}
+                      onClick={() => {
+                        if (preview) openDiscardModal();
+                        else {
+                          closeModal();
+                        }
+                      }}
                     />
                     {/* <div className=""> */}
                     {/* </div> */}
@@ -230,6 +246,11 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   )}
                 </Dialog.Panel>
               </Transition.Child>
+              <DiscardModal
+                close={close}
+                closeDiscardModal={closeDiscardModal}
+                discard={discard}
+              />
             </div>
           </div>
         </Dialog>
@@ -238,3 +259,78 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   );
 };
 export default CreatePostModal;
+
+function DiscardModal({
+  close,
+  closeDiscardModal,
+  discard,
+}: {
+  close: boolean;
+  closeDiscardModal: () => void;
+  discard: () => void;
+}) {
+  return (
+    <>
+      <Transition appear show={close} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeDiscardModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="px-6 pt-6 pt-4 text-center text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Discard post?
+                  </Dialog.Title>
+                  <div className="mt-2 ">
+                    <p className="text-center text-sm text-gray-500">
+                      If you leave, your edits won&apos;t be saved.
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex w-full flex-col">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center   px-4 py-2 text-sm font-semibold font-medium text-red-500 focus:outline-none focus:ring-0 "
+                      onClick={discard}
+                    >
+                      Discard
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      onClick={closeDiscardModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
+}
