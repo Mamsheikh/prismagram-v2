@@ -75,4 +75,23 @@ export const userRouter = createTRPCRouter({
       });
       return post;
     }),
+
+  posts: publicProcedure.query(async ({ ctx }) => {
+    const menuItems = await ctx.prisma.post.findMany();
+
+    // Each menu items only contains its AWS key. Extend all items with their actual img url
+    const withUrls = await Promise.all(
+      menuItems.map(async (post) => {
+        return {
+          ...post,
+          url: await s3.getSignedUrlPromise("getObject", {
+            Bucket: "prismagram-bucket",
+            Key: post.image,
+          }),
+        };
+      })
+    );
+
+    return withUrls;
+  }),
 });
