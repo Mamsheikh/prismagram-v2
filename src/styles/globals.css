@@ -20,6 +20,11 @@
   }
 }
 
+.nextimg {
+  width: 100%;
+  height: auto;
+}
+
 .instagram-logo {
   background-position: 0 -130px;
   height: 51px;

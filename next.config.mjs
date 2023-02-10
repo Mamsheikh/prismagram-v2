@@ -14,5 +14,11 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: [
+      "prismagram-bucket.s3.amazonaws.com",
+      "lh3.googleusercontent.com",
+    ],
+  },
 };
 export default config;
