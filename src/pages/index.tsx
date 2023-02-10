@@ -8,7 +8,7 @@ import Feed from "../components/Home";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-  console.log({ session });
+  // console.log({ session });
   const reloadSession = () => {
     const event = new Event("visibilitychange");
     document.dispatchEvent(event);

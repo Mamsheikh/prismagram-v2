@@ -9,7 +9,7 @@ type FeedProps = {
 
 const Feed: React.FC<FeedProps> = () => {
   const { data } = api.user.posts.useQuery();
-  console.log({ data });
+  // console.log({ data });
   return (
     <Layout>
       <div>feed</div>
