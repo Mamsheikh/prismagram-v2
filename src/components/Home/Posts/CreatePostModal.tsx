@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
@@ -17,10 +18,12 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
 import { api } from "../../../utils/api";
+import { Session } from "next-auth";
 
 interface CreatePostModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  session: Session | null;
 }
 
 interface Input {
@@ -35,6 +38,7 @@ const initialInput: Input = {
 const CreatePostModal: React.FC<CreatePostModalProps> = ({
   isOpen,
   setIsOpen,
+  session,
 }) => {
   // const [file, setFile] = useState<File | undefined>();
   const [input, setInput] = useState(initialInput);
@@ -252,8 +256,15 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                       </div>
                       <div className=" space-y-4 border-l-2 px-4 py-2">
                         <div className="flex items-center space-x-4">
-                          <div className="h-8 w-8 rounded-full bg-blue-500"></div>
-                          <p className="text-xs text-gray-500">mamsheikh_01</p>
+                          {/* <div className="h-8 w-8 rounded-full bg-blue-500"></div> */}
+                          <img
+                            src={session?.user?.image as string}
+                            alt={`${session?.user?.username} profile photo`}
+                            className="h-9 w-9 rounded-full object-cover"
+                          />
+                          <p className="text-xs text-gray-500">
+                            {session?.user?.username}
+                          </p>
                         </div>
                         <div className="h-1/2">
                           <textarea

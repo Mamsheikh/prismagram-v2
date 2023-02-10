@@ -14,6 +14,7 @@ import {
 } from "react-icons/ai";
 import { BsFillSunFill, BsInstagram } from "react-icons/bs";
 import CreatePostModal from "../Home/Posts/CreatePostModal";
+import { type Session } from "next-auth";
 //   import { useRecoilState } from 'recoil';
 //   import { postState } from '../../atoms/addPostState';
 //   import { userState } from '../../atoms/userState';
@@ -26,10 +27,11 @@ interface HeaderProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   openModal: () => void;
+  session: Session | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal }) => {
-  const { data: session } = useSession();
+const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal, session }) => {
+  
 
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black">
@@ -101,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal }) => {
           )}
         </div>
       </div>
-      <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} session={session} />
     </header>
   );
 };
