@@ -6,6 +6,7 @@ import { BsChatDots, BsBookmarkFill } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
 import { type RouterOutputs } from "../../../utils/api";
+import CreatePostComment from "./CreatePostComment";
 
 type PostItemProps = {
   post: RouterOutputs["user"]["posts"][0];
@@ -55,34 +56,36 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
         </span>{" "}
         {post.caption}
       </div>
-      {/* <div className='mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white'>
-            <Link href={`/p/${post.id}`}>
-              <a>View all {post.comments.length} comments</a>
-            </Link>
-          </div>
-          {post.comments.slice(0, 2).map((comment) => (
-            <div
-              key={comment.id}
-              className='flex justify-between px-4 dark:text-gray-300'
-            >
-              <div>
-                <span className='mr-1 text-sm font-semibold'>
-                  {comment?.user?.username}
-                </span>
-                {comment?.content}
-              </div>
-            </div>
-          ))} */}
-      {/* <div className='flex justify-between px-4'>
-            <div>
-              <span className='mr-1 text-sm font-semibold'>Elon</span>Cool 🌚
-            </div>
-          </div> */}
-      {/* <div className='mb-4 mt-2 px-4 text-xs uppercase text-gray-400'>
-            {moment(post.createdAt).fromNow(true)} ago
-          </div> */}
+      <div className="mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white">
+        <Link href={`/p/${post.id}`}>View all 4 comments</Link>
+      </div>
+      {/* {post.comments.slice(0, 2).map((comment) => ( */}
+      <div
+        //   key={comment.id}
+        className="flex justify-between px-4 dark:text-gray-300"
+      >
+        <div>
+          <span className="mr-1 text-sm font-semibold">
+            {/* {comment?.user?.username} */}
+            mr_zero
+          </span>
+          {/* {comment?.content}
+           */}
+          noice
+        </div>
+      </div>
+      {/* ))} */}
+      <div className="flex justify-between px-4">
+        <div>
+          <span className="mr-1 text-sm font-semibold">Elon</span>Cool 🌚
+        </div>
+      </div>
+      <div className="mb-4 mt-2 px-4 text-xs uppercase text-gray-400">
+        {/* {moment(post.createdAt).fromNow(true)} ago */}
+        32m ago
+      </div>
       <hr />
-      {/* <AddComment postId={post.id} /> */}
+      <CreatePostComment />
     </div>
   );
 };
