@@ -1,5 +1,5 @@
 import { type Session } from "next-auth";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import Layout from "../Layout";
 import { api } from "../../utils/api";
 import PostItem from "./Posts/PostItem";
@@ -11,7 +11,7 @@ type FeedProps = {
 
 const Feed: React.FC<FeedProps> = () => {
   const scrollPosition = useScrollPosition();
-  const { data, hasNextPage, fetchNextPage, isFetching } =
+  const { data, hasNextPage, fetchNextPage, isLoading, isFetching } =
     api.user.posts.useInfiniteQuery(
       { limit: 1 },
       {
@@ -22,12 +22,32 @@ const Feed: React.FC<FeedProps> = () => {
 
   const posts = data?.pages.flatMap((page) => page.withUrls) ?? [];
   // if (!data) return null;
-  console.log(scrollPosition);
+  // console.log(scrollPosition);
+  // useEffect(() => {
+  //   if (scrollPosition > 85 && hasNextPage && !isFetching) {
+  //     fetchNextPage();
+  //   }
+  // }, [scrollPosition, hasNextPage, isFetching]);
+
   useEffect(() => {
-    if (scrollPosition > 85 && hasNextPage && !isFetching) {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight
+      )
+        return;
+      if (isLoading || isFetching) return;
+      // setPage(prevPage => prevPage + 1);
+      console.log("bottom page");
       fetchNextPage();
-    }
-  }, [scrollPosition, hasNextPage, isFetching]);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isLoading, isFetching]);
   return (
     <Layout>
       <div className="mx-auto grid grid-cols-1 pt-16 md:max-w-3xl md:grid-cols-2 xl:max-w-4xl xl:grid-cols-3">
