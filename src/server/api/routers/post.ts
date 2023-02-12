@@ -78,7 +78,26 @@ export const postRouter = createTRPCRouter({
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: [{ createdAt: "desc" }],
         include: {
-          user: true,
+          likes: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              image: true,
+              id: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+            },
+          },
         },
       });
 

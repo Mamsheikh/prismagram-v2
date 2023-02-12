@@ -5,14 +5,30 @@ import PostItemHeader from "./PostItemHeader";
 import { BsChatDots, BsBookmarkFill } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
-import { type RouterOutputs } from "../../../utils/api";
+import { api, type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 type PostItemProps = {
-  post: RouterOutputs["user"]["posts"]["withUrls"][number];
+  post: RouterOutputs["post"]["posts"]["withUrls"][number];
 };
 
 const PostItem: React.FC<PostItemProps> = ({ post }) => {
+  const likeMutation = api.post.like.useMutation().mutateAsync;
+  const unlikeMutation = api.post.unlike.useMutation().mutateAsync;
+
+  const hasLiked = post.likes.length > 0;
+
+  const handleLike = () => {
+    if (hasLiked) {
+      unlikeMutation({ postId: post.id });
+      return;
+    }
+    likeMutation({
+      postId: post.id,
+    });
+  };
+
   return (
     <div className="relative my-7 mx-auto max-w-[468px] rounded bg-white dark:border dark:border-gray-400 dark:bg-black">
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
@@ -34,13 +50,20 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
 
       <div className="flex justify-between p-4">
         <div className="flex space-x-4 ">
-          {/* <LikeBtn
-                loading={loading}
-                isLike={isLike}
-                handleLike={handleLike}
-                handleUnLike={handleUnLike}
-              /> */}
-          <FiHeart className="postBtn" />
+          {hasLiked ? (
+            <AiFillHeart
+              onClick={handleLike}
+              className="postBtn text-red-500"
+            />
+          ) : (
+            <AiOutlineHeart onClick={handleLike} className="postBtn" />
+          )}
+          {/* <FiHeart
+            color={hasLiked ? "red" : ""}
+            className={`postBtn ${hasLiked && "text-red-500"}`}
+            onClick={handleLike}
+          /> */}
+
           <BsChatDots className="postBtn" />
           <FaPaperPlane className="postBtn" />
         </div>
@@ -48,7 +71,7 @@ const PostItem: React.FC<PostItemProps> = ({ post }) => {
       </div>
       <div className="truncate px-4 dark:text-white">
         <p className="mb-1 mr-2 text-sm font-semibold">
-          {/* {post.likes.length} likes */}
+          {post._count.likes} likes
         </p>
         <span className="mr-1 text-sm font-semibold">
           {/* {post?.user.username} */}
