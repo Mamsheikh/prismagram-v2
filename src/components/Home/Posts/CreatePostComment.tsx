@@ -9,7 +9,7 @@ const AddComment = () => {
   //   const onChange = (e) => {
   //     setContent(e.target.value);
   //   };
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
   return (

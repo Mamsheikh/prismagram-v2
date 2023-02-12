@@ -9,7 +9,7 @@ import { type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
 
 type PostItemProps = {
-  post: RouterOutputs["user"]["posts"][0];
+  post: RouterOutputs["user"]["posts"]["withUrls"][number];
 };
 
 const PostItem: React.FC<PostItemProps> = ({ post }) => {

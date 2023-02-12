@@ -77,26 +77,52 @@ export const userRouter = createTRPCRouter({
       return post;
     }),
 
-  posts: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.post.findMany({
-      include: {
-        user: true,
-      },
-    });
-
-    // Each menu items only contains its AWS key. Extend all items with their actual img url
-    const withUrls = await Promise.all(
-      posts.map(async (post) => {
-        return {
-          ...post,
-          url: await s3.getSignedUrlPromise("getObject", {
-            Bucket: "prismagram-bucket",
-            Key: post.image,
-          }),
-        };
+  posts: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.string().nullish(),
+        limit: z.number().min(1).max(100).default(10),
       })
-    );
+    )
+    .query(async ({ ctx, input }) => {
+      const { prisma, session } = ctx;
+      const { id: userId } = session.user;
+      const { cursor, limit } = input;
 
-    return withUrls;
-  }),
+      const posts = await prisma.post.findMany({
+        take: limit + 1,
+        // where,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: [{ createdAt: "desc" }],
+        include: {
+          user: true,
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (posts.length > limit) {
+        const nextItem = posts.pop() as (typeof posts)[number];
+
+        nextCursor = nextItem.id;
+      }
+
+      // Each menu items only contains its AWS key. Extend all items with their actual img url
+      const withUrls = await Promise.all(
+        posts.map(async (post) => {
+          return {
+            ...post,
+            url: await s3.getSignedUrlPromise("getObject", {
+              Bucket: "prismagram-bucket",
+              Key: post.image,
+            }),
+          };
+        })
+      );
+
+      return {
+        withUrls,
+        nextCursor,
+      };
+    }),
 });
