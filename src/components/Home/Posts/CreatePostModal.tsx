@@ -97,8 +97,8 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   }
 
   const { mutateAsync: createPresignedUrl } =
-    api.user.createPresignedUrl.useMutation();
-  const { mutateAsync: createPost } = api.user.createPost.useMutation();
+    api.post.createPresignedUrl.useMutation();
+  const { mutateAsync: createPost } = api.post.createPost.useMutation();
 
   const handleImgUpload = async () => {
     const { file } = input;

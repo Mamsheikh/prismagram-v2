@@ -10,9 +10,8 @@ type FeedProps = {
 };
 
 const Feed: React.FC<FeedProps> = () => {
-  const scrollPosition = useScrollPosition();
-  const { data, hasNextPage, fetchNextPage, isLoading, isFetching } =
-    api.user.posts.useInfiniteQuery(
+  const { data, fetchNextPage, isLoading, isFetching } =
+    api.post.posts.useInfiniteQuery(
       { limit: 1 },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
