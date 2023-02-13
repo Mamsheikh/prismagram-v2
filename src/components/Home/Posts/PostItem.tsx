@@ -121,6 +121,10 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
             width={1000}
             className=" w-full cursor-pointer object-cover"
             src={post.url}
+            loading="lazy"
+            // loader={}
+            placeholder="blur"
+            blurDataURL="/banner.webp"
             alt=""
           />
         </div>
