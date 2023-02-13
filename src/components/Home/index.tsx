@@ -1,9 +1,10 @@
 import { type Session } from "next-auth";
-import React, { useCallback, useEffect, useRef } from "react";
-import Layout from "../Layout";
+import React, { useEffect } from "react";
 import { api } from "../../utils/api";
+import Layout from "../Layout";
 import PostItem from "./Posts/PostItem";
-import useScrollPosition from "../../hooks/scroll";
+
+const LIMIT = 2;
 
 type FeedProps = {
   session: Session | null;
@@ -12,21 +13,14 @@ type FeedProps = {
 const Feed: React.FC<FeedProps> = () => {
   const { data, fetchNextPage, isLoading, isFetching } =
     api.post.posts.useInfiniteQuery(
-      { limit: 1 },
+      { limit: LIMIT },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         refetchOnWindowFocus: false,
       }
     );
 
-  const posts = data?.pages.flatMap((page) => page.withUrls) ?? [];
-  // if (!data) return null;
-  // console.log(scrollPosition);
-  // useEffect(() => {
-  //   if (scrollPosition > 85 && hasNextPage && !isFetching) {
-  //     fetchNextPage();
-  //   }
-  // }, [scrollPosition, hasNextPage, isFetching]);
+  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +46,13 @@ const Feed: React.FC<FeedProps> = () => {
       <div className="mx-auto grid grid-cols-1 pt-16 md:max-w-3xl md:grid-cols-2 xl:max-w-4xl xl:grid-cols-3">
         <section className="col-span-2">
           {posts.map((post) => (
-            <PostItem key={post.id} post={post} />
+            <PostItem
+              key={post.id}
+              post={post}
+              input={{
+                limit: LIMIT,
+              }}
+            />
           ))}
           {/* <div className='mx-auto flex items-center justify-center md:max-w-3xl xl:max-w-4xl'>
           {data?.posts?.pageInfo?.hasNextPage ? (

@@ -72,7 +72,7 @@ export const postRouter = createTRPCRouter({
       const { id: userId } = session.user;
       const { cursor, limit } = input;
 
-      const posts = await prisma.post.findMany({
+      const postsW = await prisma.post.findMany({
         take: limit + 1,
         // where,
         cursor: cursor ? { id: cursor } : undefined,
@@ -103,15 +103,15 @@ export const postRouter = createTRPCRouter({
 
       let nextCursor: typeof cursor | undefined = undefined;
 
-      if (posts.length > limit) {
-        const nextItem = posts.pop() as (typeof posts)[number];
+      if (postsW.length > limit) {
+        const nextItem = postsW.pop() as (typeof postsW)[number];
 
         nextCursor = nextItem.id;
       }
 
       // Each menu items only contains its AWS key. Extend all items with their actual img url
-      const withUrls = await Promise.all(
-        posts.map(async (post) => {
+      const posts = await Promise.all(
+        postsW.map(async (post) => {
           return {
             ...post,
             url: await s3.getSignedUrlPromise("getObject", {
@@ -123,7 +123,7 @@ export const postRouter = createTRPCRouter({
       );
 
       return {
-        withUrls,
+        posts,
         nextCursor,
       };
     }),

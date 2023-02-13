@@ -1,21 +1,99 @@
+import {
+  InfiniteData,
+  QueryClient,
+  useQueryClient,
+} from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import PostItemHeader from "./PostItemHeader";
-import { BsChatDots, BsBookmarkFill } from "react-icons/bs";
-import { FaPaperPlane } from "react-icons/fa";
-import { FiHeart } from "react-icons/fi";
-import { api, type RouterOutputs } from "../../../utils/api";
-import CreatePostComment from "./CreatePostComment";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { BsBookmarkFill, BsChatDots } from "react-icons/bs";
+import { FaPaperPlane } from "react-icons/fa";
+import { RouterInputs, api, type RouterOutputs } from "../../../utils/api";
+import CreatePostComment from "./CreatePostComment";
+import PostItemHeader from "./PostItemHeader";
 
 type PostItemProps = {
-  post: RouterOutputs["post"]["posts"]["withUrls"][number];
+  post: RouterOutputs["post"]["posts"]["posts"][number];
+  input: RouterInputs["post"]["posts"];
 };
 
-const PostItem: React.FC<PostItemProps> = ({ post }) => {
-  const likeMutation = api.post.like.useMutation().mutateAsync;
-  const unlikeMutation = api.post.unlike.useMutation().mutateAsync;
+interface UpdateCacheParams {
+  client: QueryClient;
+  input: RouterInputs["post"]["posts"];
+  variables: {
+    postId: string;
+  };
+  data: {
+    userId: string;
+  };
+  action: "like" | "unlike";
+}
+
+function updateCache(params: UpdateCacheParams) {
+  const { action, client, data, variables, input } = params;
+
+  client.setQueryData(
+    [
+      ["post", "posts"],
+      {
+        input: input,
+        type: "infinite",
+      },
+    ],
+    (prevData) => {
+      const newData = prevData as InfiniteData<RouterOutputs["post"]["posts"]>;
+
+      const value = action === "like" ? 1 : -1;
+      const newPosts = newData.pages.map((page) => {
+        return {
+          posts: page.posts.map((post) => {
+            if (post.id === variables.postId) {
+              return {
+                ...post,
+                likes: action === "like" ? [data.userId] : [],
+                _count: {
+                  likes: post._count.likes + value,
+                },
+              };
+            }
+            return post;
+          }),
+        };
+      });
+
+      return {
+        ...newData,
+        pages: newPosts,
+      };
+    }
+  );
+}
+
+const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
+  const client = useQueryClient();
+  const likeMutation = api.post.like.useMutation({
+    onSuccess: (data, variables) => {
+      updateCache({
+        client,
+        input,
+        variables,
+        data,
+        action: "like",
+      });
+    },
+  }).mutateAsync;
+  const unlikeMutation = api.post.unlike.useMutation({
+    onSuccess: (data, variables) => {
+      updateCache({
+        client,
+        input,
+        variables,
+        data,
+        action: "unlike",
+      });
+    },
+  }).mutateAsync;
 
   const hasLiked = post.likes.length > 0;
 
