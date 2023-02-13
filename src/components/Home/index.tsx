@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { api } from "../../utils/api";
 import Layout from "../Layout";
 import PostItem from "./Posts/PostItem";
+import { SyncLoader } from "react-spinners";
 
 const LIMIT = 2;
 
@@ -11,14 +12,20 @@ type FeedProps = {
 };
 
 const Feed: React.FC<FeedProps> = () => {
-  const { data, fetchNextPage, isLoading, isFetching } =
-    api.post.posts.useInfiniteQuery(
-      { limit: LIMIT },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-        refetchOnWindowFocus: false,
-      }
-    );
+  const {
+    data,
+    fetchNextPage,
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+  } = api.post.posts.useInfiniteQuery(
+    { limit: LIMIT },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
@@ -74,17 +81,12 @@ const Feed: React.FC<FeedProps> = () => {
             You've reached the end!
           </p>
         )} */}
-          {/* <div className="mx-auto flex items-center justify-center">
-            {hasNextPage && (
-              <button
-                onClick={() => fetchNextPage()}
-                type="button"
-                className="rounded-md bg-blue-500 px-4 py-2 text-white"
-              >
-                load more
-              </button>
+          <div className="mx-auto my-10 flex items-center justify-center">
+            {isFetchingNextPage && <SyncLoader color="#4B5563" />}
+            {!hasNextPage && (
+              <p className="text-sm text-gray-600 ">No more posts</p>
             )}
-          </div> */}
+          </div>
         </section>
         <section className=" md:col-span-1 md:hidden xl:inline-grid">
           <div className="fixed">
