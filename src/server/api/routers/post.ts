@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { s3 } from "../../../lib/s3";
+import { TRPCError } from "@trpc/server";
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5; //5MB
 
@@ -126,6 +127,42 @@ export const postRouter = createTRPCRouter({
         posts,
         nextCursor,
       };
+    }),
+
+  post: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    // .output(z.i)
+    .query(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+      const { postId } = input;
+
+      const postData = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              image: true,
+            },
+          },
+        },
+      });
+
+      if (!postData) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const url = await s3.getSignedUrlPromise("getObject", {
+        Bucket: "prismagram-bucket",
+        Key: postData.image,
+        // Expires: 60 // the URL will be valid for 60 seconds
+      });
+
+      const post = { ...postData, url };
+      return post;
     }),
 
   like: protectedProcedure

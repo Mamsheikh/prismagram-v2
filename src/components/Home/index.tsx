@@ -61,26 +61,7 @@ const Feed: React.FC<FeedProps> = () => {
               }}
             />
           ))}
-          {/* <div className='mx-auto flex items-center justify-center md:max-w-3xl xl:max-w-4xl'>
-          {data?.posts?.pageInfo?.hasNextPage ? (
-            <button
-              className='my-10 rounded bg-blue-500 px-4 py-2 text-white'
-              
-            >
-              Load more
-            </button>
-          ) : (
-            <p className='my-10 text-center font-medium'>
-              You've reached the end!
-            </p>
-          )}
-        </div> */}
-          {/* {loading && <h2>loading...</h2>}
-        {data?.posts?.pageInfo?.hasNextPage === false && (
-          <p className='my-10 text-center font-medium'>
-            You've reached the end!
-          </p>
-        )} */}
+
           <div className="mx-auto my-10 flex items-center justify-center">
             {isFetchingNextPage && <SyncLoader color="#4B5563" />}
             {!hasNextPage && (
