@@ -95,10 +95,14 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
     setPreview("");
     closeModal();
   }
-
+  const utils = api.useContext();
   const { mutateAsync: createPresignedUrl } =
     api.post.createPresignedUrl.useMutation();
-  const { mutateAsync: createPost } = api.post.createPost.useMutation();
+  const { mutateAsync: createPost } = api.post.createPost.useMutation({
+    onSuccess: () => {
+      utils.post.posts.invalidate();
+    },
+  });
 
   const handleImgUpload = async () => {
     const { file } = input;
