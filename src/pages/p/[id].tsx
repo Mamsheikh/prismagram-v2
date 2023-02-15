@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+
 import { FaUserCircle } from "react-icons/fa";
 import AddComment from "../../components/Home/Posts/CreatePostComment";
 import { FiMoreHorizontal } from "react-icons/fi";
@@ -10,13 +11,13 @@ import superjson from "superjson";
 import { GetServerSideProps, type InferGetServerSidePropsType } from "next";
 import { userRouter } from "../../server/api/routers/user";
 import { appRouter } from "../../server/api/root";
-import { createInnerTRPCContext } from "../../server/api/trpc";
+
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Layout from "../../components/Layout";
 
-const Post: React.FC = () => {
+const Post: React.FC = (props) => {
   const router = useRouter();
 
   let postId = "";
@@ -58,11 +59,11 @@ const Post: React.FC = () => {
           {/* Media */}
           <div className="  h-full  max-w-xl  flex-1 bg-gray-800 md:mr-80">
             <Image
-              height={498}
-              width={498}
-              className="mr-0    object-cover "
+              height={1000}
+              width={1000}
+              className="mr-0   object-cover "
               src={post.url}
-              alt={post.caption}
+              alt={post.caption as string}
             />
           </div>
           <div className="static bottom-0 right-0 top-20 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
@@ -74,14 +75,10 @@ const Post: React.FC = () => {
                     href={`/u/${post.user.id}`}
                     className="mr-2 font-semibold "
                   >
-                    {post.user.image ? (
-                      <img
-                        className="my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500"
-                        src={post.user.image}
-                      />
-                    ) : (
-                      <FaUserCircle className="h-10 w-10" />
-                    )}
+                    <img
+                      className="my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500"
+                      src={post.user.image}
+                    />
                   </Link>
                   <div className="mt-2 flex flex-col">
                     <div>
