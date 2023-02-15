@@ -52,7 +52,7 @@ const Feed: React.FC<FeedProps> = () => {
 
   return (
     <Layout>
-      {true ? (
+      {isLoading ? (
         <div className="mt-20">
           {[0, 1, 2, 3, 4].map((_, i) => (
             <PostSkeleton key={i} />

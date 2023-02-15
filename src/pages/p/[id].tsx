@@ -1,23 +1,15 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
-import { FaUserCircle } from "react-icons/fa";
-import AddComment from "../../components/Home/Posts/CreatePostComment";
 import { FiMoreHorizontal } from "react-icons/fi";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 
 // import { createInnerTRPCContext } from "../server/api/trpc";
-import superjson from "superjson";
-import { GetServerSideProps, type InferGetServerSidePropsType } from "next";
-import { userRouter } from "../../server/api/routers/user";
-import { appRouter } from "../../server/api/root";
 
-import { api } from "../../utils/api";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import Layout from "../../components/Layout";
+import { api } from "../../utils/api";
 
-const Post: React.FC = (props) => {
+const Post: React.FC = () => {
   const router = useRouter();
 
   let postId = "";
@@ -42,10 +34,16 @@ const Post: React.FC = (props) => {
           {/* header */}
           <header className="static top-0 right-0 flex h-20 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l">
             <div className="flex items-center">
-              <Link href={`/u/${post?.user?.id}`} className="flex items-center">
-                <img
+              <Link
+                href={`/u/${post?.user?.id}`}
+                className="relative flex items-center"
+              >
+                <Image
+                  height={40}
+                  width={40}
                   className="h-10 w-10 cursor-pointer rounded-full"
-                  src={post.user.image}
+                  src={post.user.image as string}
+                  alt={`${post.user.username} profile photo`}
                 />
                 <span className="ml-2 font-semibold">{post.user.username}</span>
               </Link>
@@ -73,11 +71,14 @@ const Post: React.FC = (props) => {
                 <div className="mb-3 flex border-b py-2">
                   <Link
                     href={`/u/${post.user.id}`}
-                    className="mr-2 font-semibold "
+                    className="relative mr-2 font-semibold"
                   >
-                    <img
+                    <Image
+                      height={1000}
+                      width={1000}
                       className="my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500"
-                      src={post.user.image}
+                      src={post.user.image as string}
+                      alt="profile photo"
                     />
                   </Link>
                   <div className="mt-2 flex flex-col">
