@@ -64,6 +64,16 @@ export const postRouter = createTRPCRouter({
   posts: protectedProcedure
     .input(
       z.object({
+        where: z
+          .object({
+            user: z
+              .object({
+                id: z.string().optional(),
+              })
+              .optional(),
+          })
+          .optional()
+          .optional(),
         cursor: z.string().nullish(),
         limit: z.number().min(1).max(100).default(10),
       })
@@ -71,11 +81,11 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { prisma, session } = ctx;
       const { id: userId } = session.user;
-      const { cursor, limit } = input;
+      const { cursor, limit, where } = input;
 
       const postsW = await prisma.post.findMany({
         take: limit + 1,
-        // where,
+        where,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: [{ createdAt: "desc" }],
         include: {

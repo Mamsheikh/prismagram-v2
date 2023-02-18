@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { FiMoreHorizontal } from "react-icons/fi";
-
+import { FaRegComment } from "react-icons/fa";
+import { AiOutlineHeart } from "react-icons/ai";
 // import { createInnerTRPCContext } from "../server/api/trpc";
 
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import { api } from "../../utils/api";
 
-const Post: React.FC = () => {
+const Post: React.FC = (props) => {
   const router = useRouter();
 
   let postId = "";
@@ -22,6 +23,11 @@ const Post: React.FC = () => {
     { postId },
     { refetchOnWindowFocus: false }
   );
+
+  const { data: userPosts } = api.post.posts.useQuery({
+    limit: 6,
+    where: { user: { id: post?.user.id } },
+  });
 
   if (!post || isFetching) {
     return <div>Loading....</div>;
@@ -127,19 +133,45 @@ const Post: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* <section className='mt-10 border-t pt-10'>
-    <h3 className='mb-3 font-bold text-gray-500'>
-      More posts from
-      <Link href={`/u/${post.user.id}`}>
-        <a className='ml-1 font-semibold text-black hover:underline'>
-          {post.user.username}
-        </a>
-      </Link>
-    </h3>
-    {post.user.posts.map((post) => {
-      <PostCard post={post} key={post.id} />;
-    })}
-  </section> */}
+        <section className="mt-10 border-t pt-10">
+          <h3 className="mb-3 font-bold text-gray-500">
+            More posts from
+            <Link
+              href={`/u/${post.user.id}`}
+              className="ml-1 font-semibold text-black hover:underline"
+            >
+              {post.user.username}
+            </Link>
+          </h3>
+          <div className="grid grid-cols-3 gap-5">
+            {userPosts &&
+              userPosts.posts.map((post) => (
+                <div key={post.id} className="h-64 overflow-hidden">
+                  <div className="group relative cursor-pointer">
+                    <div className="relative h-64">
+                      <Image
+                        fill
+                        style={{ objectFit: "cover" }}
+                        src={post.url}
+                        alt={post.caption as string}
+                        className="h-64 w-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute top-0 left-1/2 flex h-full w-full -translate-x-1/2 items-center justify-center bg-black-rgba text-white opacity-0 group-hover:opacity-100">
+                      <div className="mr-2 flex items-center space-x-1">
+                        <AiOutlineHeart />
+                        <span>3</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <FaRegComment />
+                        <span>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </section>
       </div>
     </Layout>
   );
