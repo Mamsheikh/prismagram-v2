@@ -2,15 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { FiMoreHorizontal } from "react-icons/fi";
-import { FaRegComment } from "react-icons/fa";
-import { AiOutlineHeart } from "react-icons/ai";
+import { FaComment } from "react-icons/fa";
+import { AiFillHeart } from "react-icons/ai";
 // import { createInnerTRPCContext } from "../server/api/trpc";
 
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import { api } from "../../utils/api";
 
-const Post: React.FC = (props) => {
+const Post: React.FC = () => {
   const router = useRouter();
 
   let postId = "";
@@ -24,10 +24,15 @@ const Post: React.FC = (props) => {
     { refetchOnWindowFocus: false }
   );
 
-  const { data: userPosts } = api.post.posts.useQuery({
-    limit: 6,
-    where: { user: { id: post?.user.id } },
-  });
+  const { data: userPosts } = api.post.posts.useQuery(
+    {
+      limit: 6,
+      where: { user: { id: post?.user.id } },
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   if (!post || isFetching) {
     return <div>Loading....</div>;
@@ -157,16 +162,18 @@ const Post: React.FC = (props) => {
                         className="h-64 w-full object-cover"
                       />
                     </div>
-                    <div className="absolute top-0 left-1/2 flex h-full w-full -translate-x-1/2 items-center justify-center bg-black-rgba text-white opacity-0 group-hover:opacity-100">
-                      <div className="mr-2 flex items-center space-x-1">
-                        <AiOutlineHeart />
-                        <span>3</span>
+                    <Link href={`/p/${post.id}`}>
+                      <div className="absolute top-0 left-1/2 flex h-full w-full -translate-x-1/2 items-center justify-center bg-black-rgba text-white opacity-0 group-hover:opacity-100">
+                        <div className="mr-2 flex items-center space-x-1">
+                          <AiFillHeart className="text-white" />
+                          <span>{post._count.likes}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <FaComment className="text-white" />
+                          <span>2</span>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <FaRegComment />
-                        <span>2</span>
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               ))}
