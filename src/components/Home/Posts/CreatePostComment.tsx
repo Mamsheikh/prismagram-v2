@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 
-const AddComment = () => {
+const AddComment = ({ postId }: { postId: string }) => {
   const [content, setContent] = useState("");
   const router = useRouter();
 

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { type RouterOutputs } from "../../../utils/api";
 
 interface PostItemHeaderProps {
-  post: RouterOutputs["user"]["posts"][0];
+  post: RouterOutputs["post"]["posts"]["posts"][number];
 }
 
 const PostItemHeader: React.FC<PostItemHeaderProps> = ({ post }) => {

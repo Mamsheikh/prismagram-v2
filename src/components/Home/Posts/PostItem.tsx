@@ -1,6 +1,6 @@
 import {
-  InfiniteData,
-  QueryClient,
+  type InfiniteData,
+  type QueryClient,
   useQueryClient,
 } from "@tanstack/react-query";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsBookmarkFill, BsChatDots } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
-import { RouterInputs, api, type RouterOutputs } from "../../../utils/api";
+import { type RouterInputs, api, type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
 import PostItemHeader from "./PostItemHeader";
 
@@ -190,7 +190,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
         32m ago
       </div>
       <hr />
-      <CreatePostComment />
+      <CreatePostComment postId={post.id} />
     </div>
   );
 };

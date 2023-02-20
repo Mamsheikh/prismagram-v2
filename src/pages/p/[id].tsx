@@ -9,11 +9,12 @@ import { AiFillHeart } from "react-icons/ai";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import { api } from "../../utils/api";
+import CreatePostComment from "../../components/Home/Posts/CreatePostComment";
 
 const Post: React.FC = () => {
   const router = useRouter();
 
-  const { data: post, isFetching } = api.post.post.useQuery(
+  const { data: post, isLoading } = api.post.post.useQuery(
     { postId: router.query.id as string },
     { refetchOnWindowFocus: false, enabled: !!router.isReady }
   );
@@ -28,7 +29,7 @@ const Post: React.FC = () => {
     }
   );
 
-  if (!post || isFetching) {
+  if (!post || isLoading) {
     return <div>Loading....</div>;
   }
 
@@ -37,7 +38,7 @@ const Post: React.FC = () => {
       <div className=" mx-auto  overflow-y-auto p-10 pt-20 dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto">
         <div className="relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900">
           {/* header */}
-          <header className="static top-0 right-0 flex h-20 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l">
+          <header className="static top-0 right-0 flex h-14 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l">
             <div className="flex items-center">
               <Link
                 href={`/u/${post?.user?.id}`}
@@ -69,11 +70,11 @@ const Post: React.FC = () => {
               alt={post.caption as string}
             />
           </div>
-          <div className="static bottom-0 right-0 top-20 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
+          <div className="static bottom-0 right-0 top-16 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
             <div className="flex h-full flex-col justify-between">
-              <div className="md:min-h-48 overflow-y-auto px-3">
+              <div className="  px-3">
                 {/* Post Caption */}
-                <div className="mb-3 flex border-b py-2">
+                <div className="flex h-14 ">
                   <Link
                     href={`/u/${post.user.id}`}
                     className="relative mr-2 font-semibold"
@@ -86,11 +87,11 @@ const Post: React.FC = () => {
                       alt="profile photo"
                     />
                   </Link>
-                  <div className="mt-2 flex flex-col">
-                    <div>
+                  <div className="mt-2 flex h-14 flex-col ">
+                    <div className="">
                       <Link
                         href={`/u/${post.user.id}`}
-                        className="mr-1 inline-block font-semibold hover:underline"
+                        className="mr-1 inline-block py-1 font-semibold hover:underline"
                       >
                         {post.user.username}
                       </Link>
@@ -105,30 +106,26 @@ const Post: React.FC = () => {
                 {/* Comments */}
               </div>
               {/* Like And Comment Button */}
-              {/* <div>
-            {/* <PostActions
-          className='p-3'
-          postId={id}
-          addCommentRef={addCommentRef}
-          userLike={userLike}
-        />
-        {/* Like Count 
-            <LikeBtn
+              <div>
+                {/* Like Count  */}
+                {/* <LikeBtn
               isLike={isLike}
               handleLike={handleLike}
               handleUnLike={handleUnLike}
-            />
-            <p className='px-3 font-semibold'>
+            /> */}
+                {/* <p className='px-3 font-semibold'>
               {post.likes.length} like{post.likes.length === 1 ? '' : 's'}
-            </p>
-            {/* TimeStamp 
-            <Link href={`/p/${post.id}`}>
-              <a className='px-3 py-1 text-xs uppercase text-gray-500'>
-                {moment(post.createdAt).fromNow(true)} ago
-              </a>
-            </Link>
-            <AddComment postId={post.id} />
-          </div> */}
+            </p> */}
+                {/* TimeStamp */}
+                <Link
+                  href={`/p/${post.id}`}
+                  className="px-3 py-1 text-xs uppercase text-gray-500"
+                >
+                  {/* {moment(post.createdAt).fromNow(true)} ago */}
+                  32m ago
+                </Link>
+                <CreatePostComment postId={post.id} />
+              </div>
             </div>
           </div>
         </div>
