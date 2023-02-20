@@ -13,15 +13,9 @@ import { api } from "../../utils/api";
 const Post: React.FC = () => {
   const router = useRouter();
 
-  let postId = "";
-
-  if (router.query.id) {
-    postId = router.query.id as string;
-  }
-
   const { data: post, isFetching } = api.post.post.useQuery(
-    { postId },
-    { refetchOnWindowFocus: false }
+    { postId: router.query.id as string },
+    { refetchOnWindowFocus: false, enabled: !!router.isReady }
   );
 
   const { data: userPosts } = api.post.posts.useQuery(
