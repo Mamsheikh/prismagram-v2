@@ -1,16 +1,20 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
+import { api } from "../../../utils/api";
 
 const AddComment = ({ postId }: { postId: string }) => {
   const [content, setContent] = useState("");
   const router = useRouter();
+  const { mutateAsync: createComment } =
+    api.comment.createComment.useMutation();
 
-  //   const onChange = (e) => {
-  //     setContent(e.target.value);
-  //   };
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await createComment({ content, postId });
+      setContent("");
+    } catch (error) {}
   };
   return (
     <>
