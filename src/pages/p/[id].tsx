@@ -35,7 +35,7 @@ dayjs.updateLocale("en", {
   },
 });
 
-const Post: React.FC = () => {
+const Post: React.FC = (props) => {
   const router = useRouter();
 
   const { data: post, isLoading } = api.post.post.useQuery(

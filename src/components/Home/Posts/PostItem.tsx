@@ -186,30 +186,37 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
         </span>{" "}
         {post.caption}
       </div>
-      <div className="mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white">
-        <Link href={`/p/${post.id}`}>View all 4 comments</Link>
-      </div>
-      {/* {post.comments.slice(0, 2).map((comment) => ( */}
-      <div
-        //   key={comment.id}
-        className="flex justify-between px-4 dark:text-gray-300"
-      >
-        <div>
-          <span className="mr-1 text-sm font-semibold">
-            {/* {comment?.user?.username} */}
-            mr_zero
-          </span>
-          {/* {comment?.content}
-           */}
-          noice
-        </div>
-      </div>
-      {/* ))} */}
-      <div className="flex justify-between px-4">
+      {post._count.comments > 1 && (
+        <>
+          <div className="mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white">
+            <Link href={`/p/${post.id}`}>
+              View all {post._count.comments} comments
+            </Link>
+          </div>
+          {post.comments.map((comment) => (
+            <div
+              key={comment.id}
+              className="flex justify-between px-4 dark:text-gray-300"
+            >
+              <div>
+                <span className="mr-1 text-sm font-semibold">
+                  {/* {comment?.user?.username} */}
+                  {comment.user.username}
+                </span>
+                {/* {comment?.content}
+                 */}
+                {comment.content}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* <div className="flex justify-between px-4">
         <div>
           <span className="mr-1 text-sm font-semibold">Elon</span>Cool 🌚
         </div>
-      </div>
+      </div> */}
       <div className="mb-4 mt-2 px-4 text-xs uppercase text-gray-400">
         {dayjs(post.createdAt).fromNow()} ago
       </div>
