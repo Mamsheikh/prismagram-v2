@@ -84,7 +84,7 @@ const Post: React.FC = () => {
           </div>
           <div className="static bottom-0 right-0 top-16 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
             <div className="flex h-full flex-col justify-between">
-              <div className="scroll-m-0 overflow-y-auto  px-3">
+              <div className="overflow-y-auto px-3  scrollbar-none">
                 {/* Post Caption */}
                 <div className="flex h-14 ">
                   <Link

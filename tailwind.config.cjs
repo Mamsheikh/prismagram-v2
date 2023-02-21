@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'black-rgba':'rgba(0,0,0,0.3)'
-      }
+        "black-rgba": "rgba(0,0,0,0.3)",
+      },
     },
   },
-  plugins: [require('@tailwindcss/forms'),],
+  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
 };
