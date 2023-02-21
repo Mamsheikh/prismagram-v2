@@ -30,7 +30,7 @@ export const commentRouter = createTRPCRouter({
       });
     }),
 
-  comment: protectedProcedure
+  comments: protectedProcedure
     .input(
       z.object({
         postId: z.string(),
@@ -46,6 +46,15 @@ export const commentRouter = createTRPCRouter({
         take: limit + 1,
         where: {
           postId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              image: true,
+            },
+          },
         },
         cursor: cursor ? { id: cursor } : undefined,
       });

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaComment } from "react-icons/fa";
-import { AiFillHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlinePlusCircle } from "react-icons/ai";
 // import { createInnerTRPCContext } from "../server/api/trpc";
 
 import { useRouter } from "next/router";
@@ -19,6 +19,15 @@ const Post: React.FC = () => {
     { refetchOnWindowFocus: false, enabled: !!router.isReady }
   );
 
+  const { data, hasNextPage, fetchNextPage } =
+    api.comment.comments.useInfiniteQuery(
+      { limit: 5, postId: router.query.id as string },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        enabled: !!router.isReady,
+      }
+    );
+
   const { data: userPosts } = api.post.posts.useQuery(
     {
       limit: 6,
@@ -32,6 +41,9 @@ const Post: React.FC = () => {
   if (!post || isLoading) {
     return <div>Loading....</div>;
   }
+
+  const comments = data?.pages.flatMap((page) => page.comments) ?? [];
+  console.log(data);
 
   return (
     <Layout>
@@ -72,7 +84,7 @@ const Post: React.FC = () => {
           </div>
           <div className="static bottom-0 right-0 top-16 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
             <div className="flex h-full flex-col justify-between">
-              <div className="  px-3">
+              <div className="scroll-m-0 overflow-y-auto  px-3">
                 {/* Post Caption */}
                 <div className="flex h-14 ">
                   <Link
@@ -104,6 +116,48 @@ const Post: React.FC = () => {
                 </div>
 
                 {/* Comments */}
+                <div className="comments-container my-1">
+                  {comments &&
+                    comments.map((comment) => (
+                      <div key={comment?.id} className=" mt-2 flex">
+                        <Link
+                          href={`/u/${comment.user.id}`}
+                          className=" mr-2 flex-shrink-0 font-semibold "
+                        >
+                          <Image
+                            height={100}
+                            width={100}
+                            className="h-10 w-10 cursor-pointer rounded-full"
+                            src={comment.user.image as string}
+                            alt={`${comment.user.username} profile photo`}
+                          />
+                        </Link>
+                        <div className=" ">
+                          {/* <div className="flex space-x-1"> */}
+                          <Link
+                            href={`/u/${comment.user.id}`}
+                            className="flex font-semibold hover:underline"
+                          >
+                            {comment.user.username}
+                          </Link>
+                          <span>{comment.content}</span>
+                          {/* </div> */}
+                          {/* <span className='mt-2 text-sm text-gray-400'>
+                          {moment(post.createdAt).fromNow(true)} ago
+                        </span> */}
+                        </div>
+                      </div>
+                    ))}
+                  {hasNextPage && (
+                    <div className="flex items-center justify-center">
+                      {" "}
+                      <AiOutlinePlusCircle
+                        className="h-7 w-7 cursor-pointer"
+                        onClick={() => fetchNextPage()}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
               {/* Like And Comment Button */}
               <div>
