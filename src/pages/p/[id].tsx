@@ -3,7 +3,11 @@ import Link from "next/link";
 
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaComment } from "react-icons/fa";
-import { AiFillHeart, AiOutlinePlusCircle } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiOutlinePlusCircle,
+} from "react-icons/ai";
 // import { createInnerTRPCContext } from "../server/api/trpc";
 
 import { useRouter } from "next/router";
@@ -13,6 +17,8 @@ import CreatePostComment from "../../components/Home/Posts/CreatePostComment";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
+import { BsChat, BsBookmark } from "react-icons/bs";
+import { IoPaperPlaneOutline } from "react-icons/io5";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -107,7 +113,7 @@ const Post: React.FC = (props) => {
           </div>
           <div className="static bottom-0 right-0 top-16 flex flex-col justify-between md:absolute md:w-80 md:border-l md:border-gray-300">
             <div className="flex h-full flex-col justify-between">
-              <div className="overflow-y-auto px-3  scrollbar-none">
+              <div className="h-64 overflow-y-auto  px-3 scrollbar-none">
                 {/* Post Caption */}
                 <div className="flex  ">
                   <Link
@@ -182,17 +188,37 @@ const Post: React.FC = (props) => {
                   )}
                 </div>
               </div>
-              {/* Like And Comment Button */}
-              <div>
-                {/* Like Count  */}
-                {/* <LikeBtn
-              isLike={isLike}
-              handleLike={handleLike}
-              handleUnLike={handleUnLike}
-            /> */}
-                {/* <p className='px-3 font-semibold'>
-              {post.likes.length} like{post.likes.length === 1 ? '' : 's'}
-            </p> */}
+
+              <div className="flex flex-col ">
+                <div>
+                  <div className="flex justify-between p-4">
+                    <div className="flex space-x-4 ">
+                      {/* Like And Comment Button */}
+                      {/* {hasLiked ? ( */}
+                      {/* <AiFillHeart
+              // onClick={handleLike}
+              className="postBtn text-red-500"
+            />
+          ) : ( */}
+                      <AiOutlineHeart className="postBtn" />
+                      {/* )} */}
+                      {/* <FiHeart
+            color={hasLiked ? "red" : ""}
+            className={`postBtn ${hasLiked && "text-red-500"}`}
+            onClick={handleLike}
+          /> */}
+
+                      <BsChat className="postBtn" />
+                      <IoPaperPlaneOutline className="postBtn" />
+                    </div>
+                    <BsBookmark className="postBtn" />
+                  </div>
+                  <div className="truncate px-4 dark:text-white">
+                    <p className="mb-1 mr-2 text-sm font-semibold">
+                      {post._count.likes} likes
+                    </p>
+                  </div>
+                </div>
                 {/* TimeStamp */}
                 <Link
                   href={`/p/${post.id}`}

@@ -7,8 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmarkFill, BsChatDots } from "react-icons/bs";
-import { FaPaperPlane } from "react-icons/fa";
+import { BsBookmark, BsChat } from "react-icons/bs";
+import { IoPaperPlaneOutline } from "react-icons/io5";
 import { type RouterInputs, api, type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
 import PostItemHeader from "./PostItemHeader";
@@ -171,10 +171,10 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
             onClick={handleLike}
           /> */}
 
-          <BsChatDots className="postBtn" />
-          <FaPaperPlane className="postBtn" />
+          <BsChat className="postBtn" />
+          <IoPaperPlaneOutline className="postBtn" />
         </div>
-        <BsBookmarkFill className="postBtn" />
+        <BsBookmark className="postBtn" />
       </div>
       <div className="truncate px-4 dark:text-white">
         <p className="mb-1 mr-2 text-sm font-semibold">

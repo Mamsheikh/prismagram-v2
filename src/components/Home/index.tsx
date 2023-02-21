@@ -51,7 +51,6 @@ const Feed: React.FC<FeedProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isFetching]);
 
-  console.log(hasNextPage);
   return (
     <Layout>
       {isLoading ? (

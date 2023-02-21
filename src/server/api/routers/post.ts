@@ -167,11 +167,12 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
-  post: publicProcedure
+  post: protectedProcedure
     .input(z.object({ postId: z.string() }))
     // .output(z.i)
     .query(async ({ ctx, input }) => {
-      const { prisma } = ctx;
+      const { prisma, session } = ctx;
+      const { id: userId } = session.user;
       const { postId } = input;
 
       const postData = await prisma.post.findUnique({
@@ -184,6 +185,20 @@ export const postRouter = createTRPCRouter({
               id: true,
               username: true,
               image: true,
+            },
+          },
+          likes: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
             },
           },
         },
