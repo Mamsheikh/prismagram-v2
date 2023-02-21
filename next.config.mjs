@@ -18,6 +18,9 @@ const config = {
     domains: [
       "prismagram-bucket.s3.amazonaws.com",
       "lh3.googleusercontent.com",
+      "cloudflare-ipfs.com",
+      "loremflickr.com",
+      "picsum.photos",
     ],
   },
 };

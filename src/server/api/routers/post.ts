@@ -121,14 +121,29 @@ export const postRouter = createTRPCRouter({
       }
 
       // Each menu items only contains its AWS key. Extend all items with their actual img url
+      // const posts = await Promise.all(
+      //   postsW.map(async (post) => {
+      //     return {
+      //       ...post,
+      //       url: await s3.getSignedUrlPromise("getObject", {
+      //         Bucket: "prismagram-bucket",
+      //         Key: post.image,
+      //       }),
+      //     };
+      //   })
+      // );
       const posts = await Promise.all(
         postsW.map(async (post) => {
-          return {
-            ...post,
-            url: await s3.getSignedUrlPromise("getObject", {
+          let imageUrl = post.image;
+          if (!imageUrl.startsWith("http")) {
+            imageUrl = await s3.getSignedUrlPromise("getObject", {
               Bucket: "prismagram-bucket",
               Key: post.image,
-            }),
+            });
+          }
+          return {
+            ...post,
+            url: imageUrl,
           };
         })
       );
@@ -165,11 +180,18 @@ export const postRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      const url = await s3.getSignedUrlPromise("getObject", {
-        Bucket: "prismagram-bucket",
-        Key: postData.image,
-        // Expires: 60 // the URL will be valid for 60 seconds
-      });
+      // const url = await s3.getSignedUrlPromise("getObject", {
+      //   Bucket: "prismagram-bucket",
+      //   Key: postData.image,
+      //   // Expires: 60 // the URL will be valid for 60 seconds
+      // });
+      let url = postData.image;
+      if (!url.startsWith("http")) {
+        url = await s3.getSignedUrlPromise("getObject", {
+          Bucket: "prismagram-bucket",
+          Key: postData.image,
+        });
+      }
 
       const post = { ...postData, url };
       return post;

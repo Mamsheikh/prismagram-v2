@@ -6,7 +6,7 @@ import PostItem from "./Posts/PostItem";
 import { SyncLoader } from "react-spinners";
 import PostSkeleton from "./Posts/PostSkeleton";
 
-const LIMIT = 2;
+const LIMIT = 10;
 
 type FeedProps = {
   session: Session | null;
@@ -50,6 +50,7 @@ const Feed: React.FC<FeedProps> = () => {
     };
   }, [isLoading, isFetching]);
 
+  console.log(hasNextPage);
   return (
     <Layout>
       {isLoading ? (

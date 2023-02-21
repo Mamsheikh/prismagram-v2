@@ -59,6 +59,7 @@ function updateCache(params: UpdateCacheParams) {
             }
             return post;
           }),
+          nextCursor: page.nextCursor,
         };
       });
 
