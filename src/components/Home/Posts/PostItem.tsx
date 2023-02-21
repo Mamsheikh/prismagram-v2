@@ -12,6 +12,30 @@ import { FaPaperPlane } from "react-icons/fa";
 import { type RouterInputs, api, type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
 import PostItemHeader from "./PostItemHeader";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocal from "dayjs/plugin/updateLocale";
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocal);
+
+dayjs.updateLocale("en", {
+  relativeTime: {
+    future: "in %s",
+    past: "%s",
+    s: "1m",
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1M",
+    MM: "%dM",
+    y: "1y",
+    yy: "%dy",
+  },
+});
 
 type PostItemProps = {
   post: RouterOutputs["post"]["posts"]["posts"][number];
@@ -158,7 +182,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
         </p>
         <span className="mr-1 text-sm font-semibold">
           {/* {post?.user.username} */}
-          mamsheikh_01
+          {post.user.username}
         </span>{" "}
         {post.caption}
       </div>
@@ -187,8 +211,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
         </div>
       </div>
       <div className="mb-4 mt-2 px-4 text-xs uppercase text-gray-400">
-        {/* {moment(post.createdAt).fromNow(true)} ago */}
-        32m ago
+        {dayjs(post.createdAt).fromNow()} ago
       </div>
       <hr />
       <CreatePostComment postId={post.id} />

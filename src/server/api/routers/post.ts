@@ -34,6 +34,7 @@ export const postRouter = createTRPCRouter({
             resolve(signed);
           }
         );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       })) as any as { url: string; fields: any };
 
       return { url, fields, key };

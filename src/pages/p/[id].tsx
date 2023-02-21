@@ -10,6 +10,30 @@ import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
 import { api } from "../../utils/api";
 import CreatePostComment from "../../components/Home/Posts/CreatePostComment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocal from "dayjs/plugin/updateLocale";
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocal);
+
+dayjs.updateLocale("en", {
+  relativeTime: {
+    future: "in %s",
+    past: "%s",
+    s: "1m",
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1M",
+    MM: "%dM",
+    y: "1y",
+    yy: "%dy",
+  },
+});
 
 const Post: React.FC = () => {
   const router = useRouter();
@@ -43,7 +67,6 @@ const Post: React.FC = () => {
   }
 
   const comments = data?.pages.flatMap((page) => page.comments) ?? [];
-  console.log(data);
 
   return (
     <Layout>
@@ -86,20 +109,20 @@ const Post: React.FC = () => {
             <div className="flex h-full flex-col justify-between">
               <div className="overflow-y-auto px-3  scrollbar-none">
                 {/* Post Caption */}
-                <div className="flex h-14 ">
+                <div className="flex  ">
                   <Link
                     href={`/u/${post.user.id}`}
-                    className="relative mr-2 font-semibold"
+                    className="relative mr-2 flex-shrink-0 font-semibold"
                   >
                     <Image
-                      height={1000}
-                      width={1000}
-                      className="my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500"
+                      height={40}
+                      width={40}
+                      className="h-10 w-10 cursor-pointer rounded-full object-cover"
                       src={post.user.image as string}
-                      alt="profile photo"
+                      alt={`${post.user.username} profile photo`}
                     />
                   </Link>
-                  <div className="mt-2 flex h-14 flex-col ">
+                  <div className="flex  flex-col ">
                     <div className="">
                       <Link
                         href={`/u/${post.user.id}`}
@@ -116,7 +139,7 @@ const Post: React.FC = () => {
                 </div>
 
                 {/* Comments */}
-                <div className="comments-container my-1">
+                <div className=" my-1">
                   {comments &&
                     comments.map((comment) => (
                       <div key={comment?.id} className=" mt-2 flex">
@@ -175,8 +198,7 @@ const Post: React.FC = () => {
                   href={`/p/${post.id}`}
                   className="px-3 py-1 text-xs uppercase text-gray-500"
                 >
-                  {/* {moment(post.createdAt).fromNow(true)} ago */}
-                  32m ago
+                  {dayjs(post.createdAt).fromNow()} ago
                 </Link>
                 <CreatePostComment postId={post.id} />
               </div>
