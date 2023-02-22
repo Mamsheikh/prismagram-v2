@@ -73,6 +73,9 @@ const Post: React.FC = (props) => {
   }
 
   const comments = data?.pages.flatMap((page) => page.comments) ?? [];
+  const fileteredUserPosts = userPosts?.posts.filter(
+    (userPost) => userPost.id !== post.id
+  );
 
   return (
     <Layout>
@@ -242,8 +245,8 @@ const Post: React.FC = (props) => {
             </Link>
           </h3>
           <div className="grid grid-cols-3 gap-5">
-            {userPosts &&
-              userPosts.posts.map((post) => (
+            {fileteredUserPosts &&
+              fileteredUserPosts.map((post) => (
                 <div key={post.id} className="h-64 overflow-hidden">
                   <div className="group relative cursor-pointer">
                     <div className="relative h-64">
@@ -263,7 +266,7 @@ const Post: React.FC = (props) => {
                         </div>
                         <div className="flex items-center space-x-1">
                           <FaComment className="text-white" />
-                          <span>2</span>
+                          <span>{post._count.comments}</span>
                         </div>
                       </div>
                     </Link>
