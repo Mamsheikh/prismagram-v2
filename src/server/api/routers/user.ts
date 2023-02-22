@@ -24,4 +24,24 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+
+  user: protectedProcedure.query(async ({ ctx }) => {
+    const { prisma, session } = ctx;
+    const { id: userId } = session.user;
+
+    return await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        _count: {
+          select: {
+            posts: true,
+            followers: true,
+            following: true,
+          },
+        },
+      },
+    });
+  }),
 });
