@@ -62,4 +62,37 @@ export const userRouter = createTRPCRouter({
         isFollowing,
       };
     }),
+  follow: protectedProcedure
+    .input(z.object({ followId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { followId } = input;
+      const { prisma, session } = ctx;
+      const { id: userId } = session.user;
+
+      const userToFollow = await prisma.user.findUnique({
+        where: {
+          id: followId,
+        },
+      });
+
+      if (!userToFollow) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      return await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          following: {
+            connect: {
+              id: followId,
+            },
+          },
+        },
+      });
+    }),
 });
