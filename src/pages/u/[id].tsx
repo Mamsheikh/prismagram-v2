@@ -17,8 +17,10 @@ import { useSession } from "next-auth/react";
 import { api } from "../../utils/api";
 import FollowBtn from "../../components/common/FollowBtn";
 import { useQueryClient } from "@tanstack/react-query";
+import FollowersModal from "../../components/User/FollowersModal";
 
 const Profile: React.FC = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const client = useQueryClient();
@@ -34,6 +36,10 @@ const Profile: React.FC = (props) => {
       refetchOnWindowFocus: false,
     }
   );
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   if (!user || isLoading) {
     return <div>Loading user profile....</div>;
@@ -81,7 +87,7 @@ const Profile: React.FC = (props) => {
               </div>
               <div
                 className="cursor-pointer hover:underline"
-                onClick={() => console.log("Hello")}
+                onClick={() => setIsOpen(true)}
               >
                 <span className="ml-4 font-semibold">
                   {user._count.followers}
@@ -118,6 +124,7 @@ const Profile: React.FC = (props) => {
             </div>
           </div>
         </div>
+        <FollowersModal isOpen={isOpen} closeModal={closeModal} />
         {/* {showFollowers && <Followers users={user.followers} />}
         {showFollowing && <Following users={user.following} />} */}
         <hr className="mt-6 border-gray-500" />
