@@ -13,7 +13,7 @@ const PostItemHeader: React.FC<PostItemHeaderProps> = ({ post }) => {
     <div className="relative">
       <div className=" flex items-center p-4">
         <div>
-          <Link href={`/u/`}>
+          <Link href={`/u/${post.user.id}`}>
             <div className="relative">
               <Image
                 src={post.user.image as string}
@@ -28,7 +28,7 @@ const PostItemHeader: React.FC<PostItemHeaderProps> = ({ post }) => {
         {/* <
             <a> */}
         <p className="ml-4 flex-1 text-sm font-semibold dark:text-white">
-          <Link href={`/u/`}>{post.user.username}</Link>
+          <Link href={`/u/${post.user.id}`}>{post.user.username}</Link>
         </p>
         {/* </a>
          */}
