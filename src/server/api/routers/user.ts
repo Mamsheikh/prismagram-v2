@@ -37,7 +37,11 @@ export const userRouter = createTRPCRouter({
           id: userId,
         },
         include: {
-          followers: true,
+          followers: {
+            select: {
+              id: true,
+            },
+          },
 
           _count: {
             select: {
@@ -92,6 +96,39 @@ export const userRouter = createTRPCRouter({
         data: {
           following: {
             connect: {
+              id: followId,
+            },
+          },
+        },
+      });
+    }),
+  unfollow: protectedProcedure
+    .input(z.object({ followId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { followId } = input;
+      const { prisma, session } = ctx;
+      const { id: userId } = session.user;
+
+      const userToUnFollow = await prisma.user.findUnique({
+        where: {
+          id: followId,
+        },
+      });
+
+      if (!userToUnFollow) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      return await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          following: {
+            disconnect: {
               id: followId,
             },
           },

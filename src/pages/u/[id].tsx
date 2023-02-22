@@ -15,20 +15,25 @@ import { BsBookmark } from "react-icons/bs";
 import { AiOutlinePlayCircle } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import { api } from "../../utils/api";
+import FollowBtn from "../../components/common/FollowBtn";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Profile: React.FC = (props) => {
   const { data: session } = useSession();
   const router = useRouter();
+  const client = useQueryClient();
   const { data: user, isLoading } = api.user.user.useQuery(
     {
       userId: router.query.id as string,
     },
     {
       enabled: !!router.isReady,
+      retry: (failureCount, error) => {
+        return failureCount < 3 && error.data?.httpStatus != 404;
+      },
+      refetchOnWindowFocus: false,
     }
   );
-
-  const {mutateAsync:follow} = api.user.follow.useMutation()
 
   if (!user || isLoading) {
     return <div>Loading user profile....</div>;
@@ -42,9 +47,9 @@ const Profile: React.FC = (props) => {
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="mx-5 max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white xl:mx-auto">
+      <div className="mx-auto max-w-6xl justify-center overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white xl:mx-auto">
         <div className="grid grid-cols-4 gap-4">
-          <div className="flex justify-center sm:col-span-2 lg:col-span-1">
+          <div className="col-span-1 flex justify-center">
             <Image
               height={36}
               width={36}
@@ -53,7 +58,7 @@ const Profile: React.FC = (props) => {
               alt=""
             />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-3">
             <span className="mr-4 text-2xl text-gray-600 dark:text-white">
               {user.username}
             </span>
@@ -68,18 +73,7 @@ const Profile: React.FC = (props) => {
                 <IoSettingsOutline className="inline h-6 flex-1 cursor-pointer" />
               </>
             ) : (
-              <>
-                {isFollowing ? (
-                  <button className="rounded-md bg-red-500 px-4 py-2">
-                    Unfollow
-                  </button>
-                ) : (
-                  <button className="rounded-md bg-blue-500 px-4 py-2" onClick={() => follow({followId: user.id})}>
-                    Follow
-                  </button>
-                )}
-              </>
-              //   {isFollowing &&  <button>Unfollow</button> }
+              <FollowBtn isFollowing={isFollowing} user={user} />
             )}
             <div className="mt-4 flex">
               <div>
