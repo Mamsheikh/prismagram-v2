@@ -165,11 +165,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
           ) : (
             <AiOutlineHeart onClick={handleLike} className="postBtn" />
           )}
-          {/* <FiHeart
-            color={hasLiked ? "red" : ""}
-            className={`postBtn ${hasLiked && "text-red-500"}`}
-            onClick={handleLike}
-          /> */}
 
           <BsChat className="postBtn" />
           <IoPaperPlaneOutline className="postBtn" />

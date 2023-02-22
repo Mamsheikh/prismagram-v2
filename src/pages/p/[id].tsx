@@ -19,6 +19,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
 import { BsChat, BsBookmark } from "react-icons/bs";
 import { IoPaperPlaneOutline } from "react-icons/io5";
+import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -43,7 +44,7 @@ dayjs.updateLocale("en", {
 
 const Post: React.FC = (props) => {
   const router = useRouter();
-
+  const utils = api.useContext();
   const { data: post, isLoading } = api.post.post.useQuery(
     { postId: router.query.id as string },
     { refetchOnWindowFocus: false, enabled: !!router.isReady }
@@ -68,15 +69,38 @@ const Post: React.FC = (props) => {
     }
   );
 
+  // const client = useQueryClient();
+  const likeMutation = api.post.like.useMutation({
+    onSuccess: () => {
+      utils.post.post.invalidate();
+    },
+  }).mutateAsync;
+  const unlikeMutation = api.post.unlike.useMutation({
+    onSuccess: () => {
+      utils.post.post.invalidate();
+    },
+  }).mutateAsync;
+
+  const hasLiked = post && post.likes.length > 0;
+
+  const handleLike = () => {
+    if (!post) return;
+    if (hasLiked) {
+      unlikeMutation({ postId: post.id });
+      return;
+    }
+    likeMutation({
+      postId: post.id,
+    });
+  };
+
   if (!post || isLoading) {
     return <div>Loading....</div>;
   }
-
   const comments = data?.pages.flatMap((page) => page.comments) ?? [];
   const fileteredUserPosts = userPosts?.posts.filter(
     (userPost) => userPost.id !== post.id
   );
-
   return (
     <Layout>
       <div className=" mx-auto  overflow-y-auto p-10 pt-20 dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto">
@@ -109,7 +133,7 @@ const Post: React.FC = (props) => {
             <Image
               height={1000}
               width={1000}
-              className="mr-0   object-cover "
+              className="mr-0 h-[406px]  object-cover "
               src={post.url}
               alt={post.caption as string}
             />
@@ -197,19 +221,17 @@ const Post: React.FC = (props) => {
                   <div className="flex justify-between p-4">
                     <div className="flex space-x-4 ">
                       {/* Like And Comment Button */}
-                      {/* {hasLiked ? ( */}
-                      {/* <AiFillHeart
-              // onClick={handleLike}
-              className="postBtn text-red-500"
-            />
-          ) : ( */}
-                      <AiOutlineHeart className="postBtn" />
-                      {/* )} */}
-                      {/* <FiHeart
-            color={hasLiked ? "red" : ""}
-            className={`postBtn ${hasLiked && "text-red-500"}`}
-            onClick={handleLike}
-          /> */}
+                      {hasLiked ? (
+                        <AiFillHeart
+                          onClick={handleLike}
+                          className="postBtn text-red-500"
+                        />
+                      ) : (
+                        <AiOutlineHeart
+                          onClick={handleLike}
+                          className="postBtn"
+                        />
+                      )}
 
                       <BsChat className="postBtn" />
                       <IoPaperPlaneOutline className="postBtn" />
