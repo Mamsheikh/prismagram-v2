@@ -28,6 +28,8 @@ const Profile: React.FC = (props) => {
     }
   );
 
+  const {mutateAsync:follow} = api.user.follow.useMutation()
+
   if (!user || isLoading) {
     return <div>Loading user profile....</div>;
   }
@@ -72,7 +74,7 @@ const Profile: React.FC = (props) => {
                     Unfollow
                   </button>
                 ) : (
-                  <button className="rounded-md bg-blue-500 px-4 py-2">
+                  <button className="rounded-md bg-blue-500 px-4 py-2" onClick={() => follow({followId: user.id})}>
                     Follow
                   </button>
                 )}

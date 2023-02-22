@@ -29,14 +29,15 @@ export const userRouter = createTRPCRouter({
   user: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { prisma } = ctx;
+      const { prisma, session } = ctx;
       const { userId } = input;
+      const { id: sessionUserId } = session.user;
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
         },
         include: {
-          following: true,
+          followers: true,
 
           _count: {
             select: {
@@ -55,7 +56,9 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      const isFollowing = !!user.following.find((user) => user.id === userId);
+      const isFollowing = !!user.followers.find(
+        (user) => user.id === sessionUserId
+      );
 
       return {
         ...user,
