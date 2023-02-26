@@ -79,7 +79,7 @@ const Profile: React.FC = (props) => {
                 <IoSettingsOutline className="inline h-6 flex-1 cursor-pointer" />
               </>
             ) : (
-              <FollowBtn isFollowing={isFollowing} user={user} />
+              <FollowBtn isFollowing={isFollowing} userId={user.id} />
             )}
             <div className="mt-4 flex">
               <div>
@@ -96,7 +96,7 @@ const Profile: React.FC = (props) => {
               </div>
               <div
                 className="cursor-pointer hover:underline"
-                onClick={() => console.log("hello")}
+                onClick={() => setIsOpen(true)}
               >
                 <span className="ml-4 font-semibold">
                   {user._count.following}
@@ -124,7 +124,12 @@ const Profile: React.FC = (props) => {
             </div>
           </div>
         </div>
-        <FollowersModal isOpen={isOpen} closeModal={closeModal} />
+        <FollowersModal
+          isOpen={isOpen}
+          closeModal={closeModal}
+          userId={user.id}
+          sessionUserId={session?.user?.id}
+        />
         {/* {showFollowers && <Followers users={user.followers} />}
         {showFollowing && <Following users={user.following} />} */}
         <hr className="mt-6 border-gray-500" />

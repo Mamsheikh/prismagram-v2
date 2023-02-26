@@ -4,16 +4,17 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface FollowBtnProps {
   isFollowing: boolean;
-  user: RouterOutputs["user"]["user"];
+  userId: string;
   //   userId: string;
 }
 
-const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, user }) => {
+const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
   const client = useQueryClient();
   const utils = api.useContext();
   const { mutateAsync: follow } = api.user.follow.useMutation({
     onSuccess: (data, variables) => {
       utils.user.user.invalidate();
+      utils.user.followers.invalidate();
       //   client.setQueryData(
       //     [
       //       ["user", "user"],
@@ -48,6 +49,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, user }) => {
   const { mutateAsync: unfollow } = api.user.unfollow.useMutation({
     onSuccess: () => {
       utils.user.user.invalidate();
+      utils.user.followers.invalidate();
       //   if (user) {
       //     utils.user.user.setData({ userId: user.id }, (prevData) => {
       //       if (prevData) {
@@ -64,11 +66,11 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, user }) => {
 
   const handleFollow = () => {
     follow({
-      followId: user.id,
+      followId: userId,
     });
   };
   const handleUnFollow = () => {
-    unfollow({ followId: user.id });
+    unfollow({ followId: userId });
   };
   return (
     <>
