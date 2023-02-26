@@ -18,12 +18,13 @@ import { api } from "../../utils/api";
 import FollowBtn from "../../components/common/FollowBtn";
 import { useQueryClient } from "@tanstack/react-query";
 import FollowersModal from "../../components/User/FollowersModal";
+import FollowingModal from "../../components/User/FollowingModal";
 
 const Profile: React.FC = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenFollowing, setIsOpenFollowing] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
-  const client = useQueryClient();
   const { data: user, isLoading } = api.user.user.useQuery(
     {
       userId: router.query.id as string,
@@ -39,6 +40,9 @@ const Profile: React.FC = (props) => {
 
   function closeModal() {
     setIsOpen(false);
+  }
+  function closeFollowingModal() {
+    setIsOpenFollowing(false);
   }
 
   if (!user || isLoading) {
@@ -96,7 +100,7 @@ const Profile: React.FC = (props) => {
               </div>
               <div
                 className="cursor-pointer hover:underline"
-                onClick={() => setIsOpen(true)}
+                onClick={() => setIsOpenFollowing(true)}
               >
                 <span className="ml-4 font-semibold">
                   {user._count.following}
@@ -128,7 +132,11 @@ const Profile: React.FC = (props) => {
           isOpen={isOpen}
           closeModal={closeModal}
           userId={user.id}
-          sessionUserId={session?.user?.id}
+        />
+        <FollowingModal
+          isOpen={isOpenFollowing}
+          closeModal={closeFollowingModal}
+          userId={user.id}
         />
         {/* {showFollowers && <Followers users={user.followers} />}
         {showFollowing && <Following users={user.following} />} */}

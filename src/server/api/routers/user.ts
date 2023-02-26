@@ -199,4 +199,71 @@ export const userRouter = createTRPCRouter({
       // Return the modified followers list
       return followers;
     }),
+
+  following: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { prisma, session } = ctx;
+      const { userId } = input;
+      const { id: sessionUserId } = session.user;
+
+      // Get the user's followers and following lists
+      const [user, followers] = await Promise.all([
+        prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+          include: {
+            following: {
+              select: {
+                id: true,
+                image: true,
+                username: true,
+                name: true,
+              },
+            },
+            followers: {
+              where: {
+                id: {
+                  not: sessionUserId,
+                },
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+        }),
+        prisma.user
+          .findUnique({
+            where: {
+              id: sessionUserId,
+            },
+            select: {
+              followers: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          })
+          .then((user) => user?.followers?.map((f) => f.id) || []),
+      ]);
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Profile not found.",
+        });
+      }
+
+      // Add the `isFollowed` property to each user object
+      const following = user.following.map((user) => ({
+        ...user,
+        isFollowed: followers.includes(user.id),
+      }));
+
+      // Return the modified following list
+      return following;
+    }),
 });

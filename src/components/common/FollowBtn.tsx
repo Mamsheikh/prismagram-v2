@@ -15,6 +15,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
     onSuccess: (data, variables) => {
       utils.user.user.invalidate();
       utils.user.followers.invalidate();
+      utils.user.following.invalidate();
       //   client.setQueryData(
       //     [
       //       ["user", "user"],
@@ -50,6 +51,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
     onSuccess: () => {
       utils.user.user.invalidate();
       utils.user.followers.invalidate();
+      utils.user.following.invalidate();
       //   if (user) {
       //     utils.user.user.setData({ userId: user.id }, (prevData) => {
       //       if (prevData) {

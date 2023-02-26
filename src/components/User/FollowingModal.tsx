@@ -13,11 +13,11 @@ interface IProps {
   userId: string;
 }
 
-const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
-  const { data: followers } = api.user.followers.useQuery({
+const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
+  const { data: following } = api.user.following.useQuery({
     userId,
   });
-  if (!followers) return null;
+  if (!following) return null;
 
   return (
     <>
@@ -51,36 +51,36 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                     as="h3"
                     className="border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
                   >
-                    Followers
+                    Following
                   </Dialog.Title>
                   <div className="h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
-                    {followers &&
-                      followers.map((follower) => (
+                    {following &&
+                      following.map((follow) => (
                         <div
-                          key={follower.id}
+                          key={follow.id}
                           className="oveflow-hidden mt-4 flex items-center justify-between px-6"
                         >
                           <div className="flex items-center">
                             <Image
-                              src={follower.image as string}
+                              src={follow.image as string}
                               height={20}
                               width={20}
                               className="h-10 w-10 rounded-full object-cover"
-                              alt={`${follower.username} profile photo`}
+                              alt={`${follow.username} profile photo`}
                             />
                             <div className="flex flex-col">
                               <span className="ml-2 font-semibold">
-                                {follower.username}
+                                {follow.username}
                               </span>
                               <span className="ml-2 text-xs text-gray-400">
-                                {follower.name}
+                                {follow.name}
                               </span>
                             </div>
                           </div>
                           <div>
                             <FollowBtn
-                              isFollowing={follower.isFollowing}
-                              userId={follower.id}
+                              isFollowing={follow.isFollowed}
+                              userId={follow.id}
                             />
                           </div>
                         </div>
@@ -136,4 +136,4 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
     </>
   );
 };
-export default FollowersModal;
+export default FollowingModal;
