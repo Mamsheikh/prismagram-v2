@@ -48,13 +48,23 @@ model User {
     username      String?   @unique
     emailVerified DateTime?
     image         String?
-    followers     User[]    @relation("FollowRelation")
-    following     User[]    @relation("FollowRelation")
+    followers     Follow[]  @relation("FollowedRelation")
+    following     Follow[]  @relation("FollowerRelation")
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
     likes         Like[]
     comments      Comment[]
+}
+
+model Follow {
+    id         String @id @default(cuid())
+    followedId String
+    followed   User   @relation(name: "FollowedRelation", fields: [followedId], references: [id], onDelete: Cascade)
+    followerId String
+    follower   User   @relation(name: "FollowerRelation", fields: [followerId], references: [id], onDelete: Cascade)
+
+    @@unique([followedId, followerId])
 }
 
 model VerificationToken {

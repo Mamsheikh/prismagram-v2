@@ -11,11 +11,11 @@ interface FollowBtnProps {
 const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
   const client = useQueryClient();
   const utils = api.useContext();
-  const { mutateAsync: follow } = api.user.follow.useMutation({
+  const { mutateAsync: follow } = api.follow.follow.useMutation({
     onSuccess: (data, variables) => {
       utils.user.user.invalidate();
-      utils.user.followers.invalidate();
-      utils.user.following.invalidate();
+      // utils.user.followers.invalidate();
+      // utils.user.following.invalidate();
       //   client.setQueryData(
       //     [
       //       ["user", "user"],
@@ -47,11 +47,11 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
       //   }
     },
   });
-  const { mutateAsync: unfollow } = api.user.unfollow.useMutation({
+  const { mutateAsync: unfollow } = api.follow.unfollow.useMutation({
     onSuccess: () => {
       utils.user.user.invalidate();
-      utils.user.followers.invalidate();
-      utils.user.following.invalidate();
+      // utils.user.followers.invalidate();
+      // utils.user.following.invalidate();
       //   if (user) {
       //     utils.user.user.setData({ userId: user.id }, (prevData) => {
       //       if (prevData) {
@@ -72,7 +72,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
     });
   };
   const handleUnFollow = () => {
-    unfollow({ followId: userId });
+    unfollow({ followedId: userId });
   };
   return (
     <>

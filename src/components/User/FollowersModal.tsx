@@ -14,10 +14,10 @@ interface IProps {
 }
 
 const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
-  const { data: followers } = api.user.followers.useQuery({
-    userId,
-  });
-  if (!followers) return null;
+  // const { data: followers } = api.user.followers.useQuery({
+  //   userId,
+  // });
+  // if (!followers) return null;
 
   return (
     <>
@@ -54,7 +54,7 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                     Followers
                   </Dialog.Title>
                   <div className="h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
-                    {followers &&
+                    {/* {followers &&
                       followers.map((follower) => (
                         <div
                           key={follower.id}
@@ -84,7 +84,7 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             />
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     <div className="mt-4 flex w-full flex-col">
                       <button
                         type="button"

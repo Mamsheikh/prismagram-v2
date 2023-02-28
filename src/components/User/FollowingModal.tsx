@@ -14,10 +14,24 @@ interface IProps {
 }
 
 const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
-  const { data: following } = api.user.following.useQuery({
-    userId,
-  });
-  if (!following) return null;
+  // const {
+  //   data,
+  //   fetchNextPage,
+  //   isLoading,
+  //   isFetching,
+  //   isFetchingNextPage,
+  //   hasNextPage,
+  // } = api.user.following.useInfiniteQuery(
+  //   { limit: 10, userId },
+  //   {
+  //     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  //     refetchOnWindowFocus: false,
+  //   }
+  // );
+
+  // const posts = data?.pages.flatMap((page) => page.following) ?? [];
+  // console.log({ data });
+  // if (!data) return null;
 
   return (
     <>
@@ -54,7 +68,7 @@ const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                     Following
                   </Dialog.Title>
                   <div className="h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
-                    {following &&
+                    {/* {following && 
                       following.map((follow) => (
                         <div
                           key={follow.id}
@@ -84,7 +98,7 @@ const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             />
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     <div className="mt-4 flex w-full flex-col">
                       <button
                         type="button"
