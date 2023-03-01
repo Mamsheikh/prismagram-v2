@@ -14,10 +14,16 @@ interface IProps {
 }
 
 const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
-  const { data: followers } = api.user.followers.useQuery({
-    userId,
-  });
-  if (!followers) return null;
+  const { data, hasNextPage, fetchNextPage } =
+    api.user.followers.useInfiniteQuery(
+      { limit: 5, userId },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      }
+    );
+  if (!data) return null;
+  const followers = data?.pages.flatMap((page) => page.followers) ?? [];
+  console.log(followers);
 
   return (
     <>
@@ -86,6 +92,14 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                         </div>
                       ))}
                     <div className="mt-4 flex w-full flex-col">
+                      {hasNextPage && (
+                        <button
+                          className="rounded bg-teal-500 px-4 py-1 text-white"
+                          onClick={() => fetchNextPage()}
+                        >
+                          load more
+                        </button>
+                      )}
                       <button
                         type="button"
                         className="inline-flex justify-center   px-4 py-2 text-sm font-semibold  text-red-500 focus:outline-none focus:ring-0 "
