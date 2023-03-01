@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import Image from "next/image";
 import { api } from "../../utils/api";
 import FollowBtn from "../common/FollowBtn";
+import { IoMdClose } from "react-icons/io";
 
 interface IProps {
   isOpen: boolean;
@@ -55,12 +56,20 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                 <Dialog.Panel className=" w-full max-w-sm transform  rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
+                    className=" border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
                   >
-                    Followers
+                    <div className="flex items-center justify-center">
+                      <div className="flex-1">Followers</div>
+                      <div className="-mr-3 flex justify-end">
+                        <IoMdClose
+                          className=" flex h-5 w-5 cursor-pointer justify-end text-gray-600"
+                          onClick={closeModal}
+                        />
+                      </div>
+                    </div>
                   </Dialog.Title>
-                  <div className="h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
-                    {/* {followers &&
+                  <div className="h-fit max-h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
+                    {followers &&
                       followers.map((follower) => (
                         <div
                           key={follower.id}
@@ -90,57 +99,19 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             />
                           </div>
                         </div>
-                      ))} */}
-                    <div className="mt-4 flex w-full flex-col">
+                      ))}
+                    <div className="mt-4 flex justify-center">
                       {hasNextPage && (
                         <button
-                          className="rounded bg-teal-500 px-4 py-1 text-white"
+                          type="button"
+                          className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700"
                           onClick={() => fetchNextPage()}
                         >
-                          load more
+                          Load more
                         </button>
                       )}
-                      <button
-                        type="button"
-                        className="inline-flex justify-center   px-4 py-2 text-sm font-semibold  text-red-500 focus:outline-none focus:ring-0 "
-                        onClick={closeModal}
-                      >
-                        Discard
-                      </button>
                     </div>
                   </div>
-                  {/* <div className="mt-4 flex items-center justify-between px-6">
-                    <div className="flex items-center">
-                      <div className="h-10 w-10 rounded-full bg-blue-500"></div>
-                      <div className="flex flex-col items-center">
-                        <span className="ml-4 font-semibold">Mr_zero</span>
-                        <span className="ml-2 text-xs text-gray-400">
-                          Munir Ali
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <button className="rounded bg-teal-500 px-4 py-1">
-                        Follow
-                      </button>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center justify-between px-6">
-                    <div className="flex items-center">
-                      <div className="h-10 w-10 rounded-full bg-blue-500"></div>
-                      <div className="flex flex-col items-center">
-                        <span className="ml-4 font-semibold">Mr_zero</span>
-                        <span className="ml-2 text-xs text-gray-400">
-                          Munir Ali
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <button className="rounded bg-teal-500 px-4 py-1">
-                        Follow
-                      </button>
-                    </div>
-                  </div> */}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
