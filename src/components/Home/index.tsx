@@ -27,6 +27,7 @@ const Feed: React.FC<FeedProps> = () => {
       refetchOnWindowFocus: false,
     }
   );
+  console.log({data})
 
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 

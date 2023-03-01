@@ -198,7 +198,7 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      console.log(user);
+      // console.log(user.fowers);
       // Add the `isFollowing` property to each follower object
       const followers = user.followers.map((follower) => ({
         ...follower,
