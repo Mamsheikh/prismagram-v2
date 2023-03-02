@@ -15,6 +15,7 @@ import {
 import { BsFillSunFill, BsInstagram } from "react-icons/bs";
 import CreatePostModal from "../Home/Posts/CreatePostModal";
 import { type Session } from "next-auth";
+import Dropdown from "../common/ProfileDropdown";
 //   import { useRecoilState } from 'recoil';
 //   import { postState } from '../../atoms/addPostState';
 //   import { userState } from '../../atoms/userState';
@@ -30,9 +31,12 @@ interface HeaderProps {
   session: Session | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal, session }) => {
-  
-
+const Header: React.FC<HeaderProps> = ({
+  isOpen,
+  setIsOpen,
+  openModal,
+  session,
+}) => {
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black">
       <div className="mx-auto flex max-w-4xl justify-between p-2  text-black xl:mx-auto">
@@ -91,7 +95,12 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal, session }
                 <AiOutlineCompass className="navBtn" />
               </Link>
 
-              {/* <Dropdown id={data?.me?.id} image={data?.me?.image} /> */}
+              {session.user && (
+                <Dropdown
+                  id={session.user.id}
+                  image={session.user.image as string}
+                />
+              )}
             </>
           ) : (
             <Link
@@ -103,7 +112,11 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, openModal, session }
           )}
         </div>
       </div>
-      <CreatePostModal isOpen={isOpen} setIsOpen={setIsOpen} session={session} />
+      <CreatePostModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        session={session}
+      />
     </header>
   );
 };

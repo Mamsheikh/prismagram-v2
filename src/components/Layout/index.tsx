@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         session={session}
       />
       {children}
-      <MobileNav openModal={openModal} />
+      <MobileNav openModal={openModal} session={session} />
     </div>
   );
 };
