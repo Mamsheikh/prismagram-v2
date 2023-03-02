@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Image from "next/image";
 import { api } from "../../utils/api";
-import FollowBtn from "../common/FollowBtn";
+import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
 
 interface IProps {
@@ -24,7 +24,6 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
     );
   if (!data) return null;
   const followers = data?.pages.flatMap((page) => page.followers) ?? [];
-  console.log(followers);
 
   return (
     <>
@@ -93,10 +92,16 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             </div>
                           </div>
                           <div>
-                            <FollowBtn
+                            {/* <FollowBtn
                               isFollowing={follower.isFollowing}
                               userId={follower.id}
-                            />
+                            /> */}
+                            <Link
+                              href={`/u/${follower.id}`}
+                              className="rounded-sm border px-3 py-2 text-sm text-gray-600"
+                            >
+                              View profile
+                            </Link>
                           </div>
                         </div>
                       ))}
@@ -104,7 +109,7 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                       {hasNextPage && (
                         <button
                           type="button"
-                          className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700"
+                          className="mr-2 mb-2 rounded-lg bg-teal-500 px-5 py-1 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700"
                           onClick={() => fetchNextPage()}
                         >
                           Load more

@@ -44,7 +44,6 @@ const Profile: React.FC = (props) => {
   function closeFollowingModal() {
     setIsOpenFollowing(false);
   }
-  console.log({ user });
 
   if (!user || isLoading) {
     return <div>Loading user profile....</div>;
@@ -134,11 +133,11 @@ const Profile: React.FC = (props) => {
           closeModal={closeModal}
           userId={user.id}
         />
-        {/* <FollowingModal
+        <FollowingModal
           isOpen={isOpenFollowing}
           closeModal={closeFollowingModal}
           userId={user.id}
-        /> */}
+        />
         {/* {showFollowers && <Followers users={user.followers} />}
         {showFollowing && <Following users={user.following} />} */}
         <hr className="mt-6 border-gray-500" />

@@ -9,10 +9,9 @@ interface FollowBtnProps {
 }
 
 const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
-  const client = useQueryClient();
   const utils = api.useContext();
-  const { mutateAsync: follow } = api.follow.follow.useMutation({
-    onSuccess: (data, variables) => {
+  const { mutateAsync: follow } = api.user.follow.useMutation({
+    onSuccess: () => {
       utils.user.user.invalidate();
       // utils.user.followers.invalidate();
       // utils.user.following.invalidate();
@@ -47,7 +46,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
       //   }
     },
   });
-  const { mutateAsync: unfollow } = api.follow.unfollow.useMutation({
+  const { mutateAsync: unfollow } = api.user.unfollow.useMutation({
     onSuccess: () => {
       utils.user.user.invalidate();
       // utils.user.followers.invalidate();
@@ -72,7 +71,7 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
     });
   };
   const handleUnFollow = () => {
-    unfollow({ followedId: userId });
+    unfollow({ followId: userId });
   };
   return (
     <>

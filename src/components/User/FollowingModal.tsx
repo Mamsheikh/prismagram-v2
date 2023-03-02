@@ -3,9 +3,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { api } from "../../utils/api";
-import FollowBtn from "../common/FollowBtn";
+// import FollowBtn from "../common/FollowBtn";
+import { IoMdClose } from "react-icons/io";
 
 interface IProps {
   isOpen: boolean;
@@ -14,24 +16,15 @@ interface IProps {
 }
 
 const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
-  // const {
-  //   data,
-  //   fetchNextPage,
-  //   isLoading,
-  //   isFetching,
-  //   isFetchingNextPage,
-  //   hasNextPage,
-  // } = api.user.following.useInfiniteQuery(
-  //   { limit: 10, userId },
-  //   {
-  //     getNextPageParam: (lastPage) => lastPage.nextCursor,
-  //     refetchOnWindowFocus: false,
-  //   }
-  // );
-
-  // const posts = data?.pages.flatMap((page) => page.following) ?? [];
-  // console.log({ data });
-  // if (!data) return null;
+  const { data, hasNextPage, fetchNextPage } =
+    api.user.following.useInfiniteQuery(
+      { limit: 5, userId },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      }
+    );
+  if (!data) return null;
+  const following = data?.pages.flatMap((page) => page.following) ?? [];
 
   return (
     <>
@@ -65,10 +58,18 @@ const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                     as="h3"
                     className="border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
                   >
-                    Following
+                    <div className="flex items-center justify-center">
+                      <div className="flex-1">Following</div>
+                      <div className="-mr-3 flex justify-end">
+                        <IoMdClose
+                          className=" flex h-5 w-5 cursor-pointer justify-end text-gray-600"
+                          onClick={closeModal}
+                        />
+                      </div>
+                    </div>
                   </Dialog.Title>
-                  <div className="h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
-                    {/* {following && 
+                  <div className="h-fit max-h-[406px] overflow-hidden overflow-y-auto  scrollbar-thumb-slate-500">
+                    {following &&
                       following.map((follow) => (
                         <div
                           key={follow.id}
@@ -92,21 +93,29 @@ const FollowingModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             </div>
                           </div>
                           <div>
-                            <FollowBtn
+                            {/* <FollowBtn
                               isFollowing={follow.isFollowed}
                               userId={follow.id}
-                            />
+                            /> */}
+                            <Link
+                              href={`/u/${follow.id}`}
+                              className="rounded-sm border px-3 py-2 text-sm text-gray-600"
+                            >
+                              View profile
+                            </Link>
                           </div>
                         </div>
-                      ))} */}
-                    <div className="mt-4 flex w-full flex-col">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center   px-4 py-2 text-sm font-semibold  text-red-500 focus:outline-none focus:ring-0 "
-                        onClick={closeModal}
-                      >
-                        Discard
-                      </button>
+                      ))}
+                    <div className="mt-4 flex justify-center">
+                      {hasNextPage && (
+                        <button
+                          type="button"
+                          className="mr-2 mb-2 rounded-lg bg-teal-500 px-5 py-1 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700"
+                          onClick={() => fetchNextPage()}
+                        >
+                          Load more
+                        </button>
+                      )}
                     </div>
                   </div>
                   {/* <div className="mt-4 flex items-center justify-between px-6">
