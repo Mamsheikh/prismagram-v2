@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { BiGridVertical } from "react-icons/bi";
+import { FiMoreHorizontal } from "react-icons/fi";
 import { CgDisplayFullwidth } from "react-icons/cg";
 
 import toast from "react-hot-toast";
@@ -86,7 +86,15 @@ const Profile: React.FC = (props) => {
                     Edit Profile
                   </button>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <span className=" text-2xl text-gray-600 dark:text-white">
+                    {user.username}
+                    <FiMoreHorizontal className="ml-4 inline h-6 flex-1 cursor-pointer" />
+                  </span>
+                  <FollowBtn isFollowing={isFollowing} userId={user.id} />
+                </>
+              )}
             </div>
           </div>
           <div className="mt-4 mb-3 border-b border-gray-300 px-7 pb-6">
@@ -135,24 +143,28 @@ const Profile: React.FC = (props) => {
                 >
                   <CgDisplayFullwidth className="h-6 w-6" />
                 </Tab>
-                <Tab
-                  className={({ selected }) =>
-                    classNames(
-                      "flex w-full items-center justify-center  py-2.5 text-sm font-medium leading-5 text-gray-700",
-                      " focus:outline-none ",
-                      selected
-                        ? "text-blue-500"
-                        : "text-gray-500 hover:bg-white/[0.12] hover:text-white"
-                    )
-                  }
-                >
-                  <BsBookmark className="h-6 w-6" />
-                </Tab>
+                {session?.user?.id === user.id && (
+                  <Tab
+                    className={({ selected }) =>
+                      classNames(
+                        "flex w-full items-center justify-center  py-2.5 text-sm font-medium leading-5 text-gray-700",
+                        " focus:outline-none ",
+                        selected
+                          ? "text-blue-500"
+                          : "text-gray-500 hover:bg-white/[0.12] hover:text-white"
+                      )
+                    }
+                  >
+                    <BsBookmark className="h-6 w-6" />
+                  </Tab>
+                )}
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>Content 1</Tab.Panel>
                 <Tab.Panel>Content 2</Tab.Panel>
-                <Tab.Panel>Content 3</Tab.Panel>
+                {session?.user?.id === user.id && (
+                  <Tab.Panel>Content 3</Tab.Panel>
+                )}
               </Tab.Panels>
             </Tab.Group>
           </div>

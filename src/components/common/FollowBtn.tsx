@@ -78,14 +78,14 @@ const FollowBtn: React.FC<FollowBtnProps> = ({ isFollowing, userId }) => {
       {isFollowing ? (
         <button
           onClick={handleUnFollow}
-          className="rounded-md bg-red-500 px-4  py-1 text-white"
+          className="mt-3 rounded-md bg-red-500 px-4  py-1 text-white"
         >
           Unfollow
         </button>
       ) : (
         <button
           onClick={handleFollow}
-          className="rounded-md bg-blue-500 px-5 py-1 text-white"
+          className="mt-3 rounded-md bg-blue-500 px-5 py-1 text-white"
         >
           Follow
         </button>
