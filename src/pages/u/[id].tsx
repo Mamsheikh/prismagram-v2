@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -20,6 +21,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import FollowersModal from "../../components/User/FollowersModal";
 import FollowingModal from "../../components/User/FollowingModal";
 import { Tab } from "@headlessui/react";
+import PostItem from "../../components/Home/Posts/PostItem";
+import Link from "next/link";
+import { AiFillHeart } from "react-icons/ai";
+import { FaComment } from "react-icons/fa";
+
+const LIMIT = 10;
 
 const Profile: React.FC = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +45,24 @@ const Profile: React.FC = (props) => {
       refetchOnWindowFocus: false,
     }
   );
+
+  const {
+    data,
+    fetchNextPage,
+    isLoading: postsIsLoading,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+  } = api.post.posts.useInfiniteQuery(
+    { limit: LIMIT, where: { user: { id: router.query.id as string } } },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      enabled: !!router.isReady,
+    }
+  );
+
+  const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   function closeModal() {
     setIsOpen(false);
@@ -81,7 +106,7 @@ const Profile: React.FC = (props) => {
                   </span>
                   <button
                     onClick={() => console.log("hello")}
-                    className="mt-2 w-full rounded-md bg-gray-300 px-3 py-1 font-semibold"
+                    className="sm:max-sm: mt-2 w-full rounded-md bg-gray-300 px-3 py-1 font-semibold"
                   >
                     Edit Profile
                   </button>
@@ -160,8 +185,50 @@ const Profile: React.FC = (props) => {
                 )}
               </Tab.List>
               <Tab.Panels>
-                <Tab.Panel>Content 1</Tab.Panel>
-                <Tab.Panel>Content 2</Tab.Panel>
+                <Tab.Panel>
+                  <div className="grid grid-cols-3 gap-1">
+                    {posts &&
+                      posts.map((post) => (
+                        <div key={post.id} className="h-64 overflow-hidden">
+                          <div className="group relative cursor-pointer">
+                            <div className="relative">
+                              <Image
+                                height={200}
+                                width={200}
+                                // style={{ objectFit: "cover" }}
+                                src={post.url}
+                                alt={post.caption as string}
+                                className="h-64 w-full object-cover"
+                              />
+                            </div>
+                            <Link href={`/p/${post.id}`}>
+                              <div className="absolute top-0 left-1/2 flex h-full w-full -translate-x-1/2 items-center justify-center bg-black-rgba text-white opacity-0 group-hover:opacity-100">
+                                <div className="mr-2 flex items-center space-x-1">
+                                  <AiFillHeart className="text-white" />
+                                  <span>{post._count.likes}</span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  <FaComment className="text-white" />
+                                  <span>{post._count.comments}</span>
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </Tab.Panel>
+                <Tab.Panel>
+                  {posts.map((post) => (
+                    <PostItem
+                      key={post.id}
+                      post={post}
+                      input={{
+                        limit: LIMIT,
+                      }}
+                    />
+                  ))}
+                </Tab.Panel>
                 {session?.user?.id === user.id && (
                   <Tab.Panel>Content 3</Tab.Panel>
                 )}

@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsBookmark, BsChat } from "react-icons/bs";
@@ -96,6 +97,7 @@ function updateCache(params: UpdateCacheParams) {
 }
 
 const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
+  const { pathname } = useRouter();
   const client = useQueryClient();
   const likeMutation = api.post.like.useMutation({
     onSuccess: (data, variables) => {
@@ -155,68 +157,66 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
         </div>
       </Link>
 
-      <div className="flex justify-between p-4">
-        <div className="flex space-x-4 ">
-          {hasLiked ? (
-            <AiFillHeart
-              onClick={handleLike}
-              className="postBtn text-red-500"
-            />
-          ) : (
-            <AiOutlineHeart onClick={handleLike} className="postBtn" />
-          )}
-
-          <BsChat className="postBtn" />
-          <IoPaperPlaneOutline className="postBtn" />
-        </div>
-        <BsBookmark className="postBtn" />
-      </div>
-      <div className="truncate px-4 dark:text-white">
-        <p className="mb-1 mr-2 text-sm font-semibold">
-          {post._count.likes} likes
-        </p>
-        <span className="mr-1 text-sm font-semibold">
-          {/* {post?.user.username} */}
-          {post.user.username}
-        </span>{" "}
-        {post.caption}
-      </div>
-      {post._count.comments > 1 && (
-        <>
-          <div className="mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white">
-            <Link href={`/p/${post.id}`}>
-              View all {post._count.comments} comments
-            </Link>
-          </div>
-          {post.comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="flex justify-between px-4 dark:text-gray-300"
-            >
-              <div>
-                <span className="mr-1 text-sm font-semibold">
-                  {/* {comment?.user?.username} */}
-                  {comment.user.username}
-                </span>
-                {/* {comment?.content}
-                 */}
-                {comment.content}
-              </div>
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* <div className="flex justify-between px-4">
+      {pathname === "/" && (
         <div>
-          <span className="mr-1 text-sm font-semibold">Elon</span>Cool 🌚
+          <div className="flex justify-between p-4">
+            <div className="flex space-x-4 ">
+              {hasLiked ? (
+                <AiFillHeart
+                  onClick={handleLike}
+                  className="postBtn text-red-500"
+                />
+              ) : (
+                <AiOutlineHeart onClick={handleLike} className="postBtn" />
+              )}
+
+              <BsChat className="postBtn" />
+              <IoPaperPlaneOutline className="postBtn" />
+            </div>
+            <BsBookmark className="postBtn" />
+          </div>
+          <div className="truncate px-4 dark:text-white">
+            <p className="mb-1 mr-2 text-sm font-semibold">
+              {post._count.likes} likes
+            </p>
+            <span className="mr-1 text-sm font-semibold">
+              {/* {post?.user.username} */}
+              {post.user.username}
+            </span>{" "}
+            {post.caption}
+          </div>
+          {post._count.comments > 1 && (
+            <>
+              <div className="mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white">
+                <Link href={`/p/${post.id}`}>
+                  View all {post._count.comments} comments
+                </Link>
+              </div>
+              {post.comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="flex justify-between px-4 dark:text-gray-300"
+                >
+                  <div>
+                    <span className="mr-1 text-sm font-semibold">
+                      {/* {comment?.user?.username} */}
+                      {comment.user.username}
+                    </span>
+                    {/* {comment?.content}
+                     */}
+                    {comment.content}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+          <div className="mb-4 mt-2 px-4 text-xs uppercase text-gray-400">
+            {dayjs(post.createdAt).fromNow()} ago
+          </div>
+          <hr />
+          <CreatePostComment postId={post.id} />
         </div>
-      </div> */}
-      <div className="mb-4 mt-2 px-4 text-xs uppercase text-gray-400">
-        {dayjs(post.createdAt).fromNow()} ago
-      </div>
-      <hr />
-      <CreatePostComment postId={post.id} />
+      )}
     </div>
   );
 };
