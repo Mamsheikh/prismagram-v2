@@ -3,7 +3,7 @@ import { api, type RouterOutputs } from "../../utils/api";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface FollowBtnProps {
-  isFollowing: boolean;
+  isFollowing?: boolean;
   userId: string;
   //   userId: string;
 }
