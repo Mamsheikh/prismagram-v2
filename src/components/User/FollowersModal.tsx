@@ -52,7 +52,7 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-sm transform  rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className=" w-full max-w-sm transform  rounded-2xl bg-white text-left  align-middle shadow-xl transition-all dark:bg-gray-900">
                   <Dialog.Title
                     as="h3"
                     className=" border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
@@ -98,7 +98,7 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                             /> */}
                             <Link
                               href={`/u/${follower.id}`}
-                              className="rounded-sm border px-3 py-2 text-sm text-gray-600"
+                              className="rounded-sm border px-3 py-2 text-sm text-gray-600 dark:text-white"
                             >
                               View profile
                             </Link>
