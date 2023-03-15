@@ -7,6 +7,22 @@
   body {
     @apply dark:bg-black;
   }
+
+  .pb-full {
+    padding-bottom: 100%;
+  }
+
+  /* hide search icon on search focus */
+  .search-bar:focus + .fa-search {
+    display: none;
+  }
+
+  @media screen and (min-width: 768px) {
+    .post:hover .overlay {
+      display: block;
+    }
+  }
+
   .navBtn {
     @apply hidden h-6 w-6 cursor-pointer text-gray-900 transition-all duration-150 ease-out hover:scale-125 dark:text-white md:inline-flex;
   }
