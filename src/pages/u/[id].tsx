@@ -280,7 +280,7 @@ const Profile: React.FC = (props) => {
                       posts.map((post) => (
                         <div key={post.id} className="w-1/3 p-px md:px-3">
                           {/* <!-- post 1--> */}
-                          <a href="#">
+                          <Link href={`/p/${post.id}`}>
                             <article className="post  pb-full relative bg-gray-100 text-white md:mb-6">
                               {/* <!-- post image--> */}
                               <Image
@@ -313,7 +313,7 @@ const Profile: React.FC = (props) => {
                                 </div>
                               </div>
                             </article>
-                          </a>
+                          </Link>
                         </div>
                       ))}
                   </div>
