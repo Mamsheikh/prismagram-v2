@@ -3,9 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-white dark:bg-gray-800;
+  }
+}
+
 @layer components {
   body {
-    @apply dark:bg-black;
+    @apply dark:bg-gray-900;
   }
 
   .pb-full {

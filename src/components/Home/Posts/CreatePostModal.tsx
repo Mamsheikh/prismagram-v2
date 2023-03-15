@@ -196,7 +196,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 <Dialog.Panel
                   className={`w-full ${
                     preview ? "max-w-2xl" : "max-w-md"
-                  } transform overflow-hidden rounded-2xl bg-white  text-left align-middle shadow-xl transition-all  xl:max-w-2xl`}
+                  } transform overflow-hidden rounded-2xl bg-white text-left  align-middle shadow-xl transition-all dark:bg-gray-900  xl:max-w-2xl`}
                 >
                   <Dialog.Title
                     as="h3"
@@ -210,11 +210,11 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                         />
                       </div>
                     )}
-                    <span className="flex-1 justify-center">
+                    <span className="flex-1 justify-center dark:text-white">
                       Create new post
                     </span>
                     <IoMdClose
-                      className="h-5 w-5 cursor-pointer text-gray-600"
+                      className="h-5 w-5 cursor-pointer text-gray-600 dark:text-white"
                       onClick={() => {
                         if (preview) openDiscardModal();
                         else {
@@ -272,7 +272,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                         </div>
                         <div className="h-1/2">
                           <textarea
-                            className="h-full w-full resize-none  border-0 text-sm text-gray-900 focus:ring-0  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 "
+                            className="h-full w-full resize-none  border-0 text-sm text-gray-900 focus:ring-0  dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400 "
                             placeholder="Write a caption..."
                             value={input.caption}
                             onChange={handleTextChange}
@@ -286,7 +286,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                           <button
                             type="button"
                             onClick={handleCreatePost}
-                            className="mr-2 mb-2 rounded-lg bg-gradient-to-br from-green-400 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800"
+                            className="mr-2 mb-2 rounded-lg bg-gradient-to-br from-green-400 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-green-200 hover:bg-gradient-to-bl dark:focus:ring-green-800"
                           >
                             {loading ? (
                               <>
@@ -323,7 +323,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                       <div className="flex items-center justify-center px-6 py-4">
                         <button
                           type="button"
-                          className="inline-flex justify-center rounded-md  bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                          className="inline-flex justify-center rounded-md  bg-blue-500 px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 hover:bg-blue-600"
                           onClick={handleClick}
                         >
                           Select from computer

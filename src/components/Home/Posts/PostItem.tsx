@@ -135,7 +135,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
   };
 
   return (
-    <div className="relative my-7 mx-auto max-w-[468px] rounded bg-white dark:border dark:border-gray-400 dark:bg-black">
+    <div className="relative my-7 mx-auto max-w-[468px] rounded border bg-white dark:border dark:border-gray-400 dark:bg-gray-900">
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
       <PostItemHeader post={post} />
 

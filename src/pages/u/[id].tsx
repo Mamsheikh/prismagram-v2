@@ -111,7 +111,7 @@ const Profile: React.FC = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-gray-100 bg-opacity-25 pt-20">
+      <main className="bg-gray-100  pt-20 dark:bg-gray-900">
         <div className="mb-8 lg:mx-auto lg:w-8/12">
           <header className="flex flex-wrap items-center p-4 md:py-8">
             <div className="relative md:ml-16 md:w-3/12">
@@ -148,7 +148,7 @@ const Profile: React.FC = (props) => {
                     </span>
                     <button
                       onClick={() => console.log("hello")}
-                      className="mt-2  rounded-md bg-gray-300 px-3 py-1 font-semibold md:max-w-xs"
+                      className="mt-2  rounded-md bg-gray-300 px-3 py-1 font-semibold dark:bg-gray-600 md:max-w-xs"
                     >
                       Edit Profile
                     </button>

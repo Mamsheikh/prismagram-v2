@@ -15,14 +15,9 @@ import {
 import { BsFillSunFill, BsInstagram } from "react-icons/bs";
 import CreatePostModal from "../Home/Posts/CreatePostModal";
 import { type Session } from "next-auth";
+import { useTheme } from "next-themes";
 import Dropdown from "../common/ProfileDropdown";
-//   import { useRecoilState } from 'recoil';
-//   import { postState } from '../../atoms/addPostState';
-//   import { userState } from '../../atoms/userState';
-//   import { useMeQuery } from '../../generated/graphql';
-//   import AddPostModal from '../AddPostModal';
-//   import Dropdown from '../Dropdown';
-//   import Search from '../Search';
+import { MdNightlight } from "react-icons/md";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -37,8 +32,10 @@ const Header: React.FC<HeaderProps> = ({
   openModal,
   session,
 }) => {
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   return (
-    <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black">
+    <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-gray-900">
       <div className="mx-auto flex max-w-4xl justify-between p-2  text-black xl:mx-auto">
         <div className="relative hidden h-10 w-24 lg:inline-grid">
           <h2
@@ -64,18 +61,22 @@ const Header: React.FC<HeaderProps> = ({
           </Link>
 
           <AiOutlineMenu className="h-6 md:hidden" />
-          <div onClick={() => console.log("hello")}>
-            {/* {theme === 'light' ? (
-                // <MoonIcon className='navBtn' />
-                <span>
-                  <MdNightlight className='navBtn' />
-                </span>
-              ) : ( */}
-            <span>
-              {/* <SunIcon /> */}
-              <BsFillSunFill className="navBtn" />
-            </span>
-            {/* )} */}
+          <div
+            onClick={() =>
+              theme == "dark" ? setTheme("light") : setTheme("dark")
+            }
+          >
+            {theme === "light" ? (
+              // <MoonIcon className='navBtn' />
+              <span>
+                <MdNightlight className="navBtn" />
+              </span>
+            ) : (
+              <span>
+                {/* <SunIcon /> */}
+                <BsFillSunFill className="navBtn" />
+              </span>
+            )}
           </div>
           {session ? (
             <>
