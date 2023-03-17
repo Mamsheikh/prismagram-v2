@@ -17,7 +17,7 @@ import CreatePostModal from "../Home/Posts/CreatePostModal";
 import { type Session } from "next-auth";
 import { useTheme } from "next-themes";
 import Dropdown from "../common/ProfileDropdown";
-import { MdNightlight } from "react-icons/md";
+import { MdOutlineNightlight } from "react-icons/md";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({
             {theme === "light" ? (
               // <MoonIcon className='navBtn' />
               <span>
-                <MdNightlight className="navBtn" />
+                <MdOutlineNightlight className="navBtn" />
               </span>
             ) : (
               <span>

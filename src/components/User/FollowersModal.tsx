@@ -55,13 +55,13 @@ const FollowersModal: React.FC<IProps> = ({ isOpen, closeModal, userId }) => {
                 <Dialog.Panel className=" w-full max-w-sm transform  rounded-2xl bg-white text-left  align-middle shadow-xl transition-all dark:bg-gray-900">
                   <Dialog.Title
                     as="h3"
-                    className=" border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900"
+                    className=" border-b px-6 py-2 text-center text-lg font-medium leading-6 text-gray-900 dark:text-white"
                   >
                     <div className="flex items-center justify-center">
-                      <div className="flex-1">Followers</div>
+                      <div className="flex-1 dark:text-white">Followers</div>
                       <div className="-mr-3 flex justify-end">
                         <IoMdClose
-                          className=" flex h-5 w-5 cursor-pointer justify-end text-gray-600"
+                          className=" flex h-5 w-5 cursor-pointer justify-end text-gray-600 dark:text-white"
                           onClick={closeModal}
                         />
                       </div>

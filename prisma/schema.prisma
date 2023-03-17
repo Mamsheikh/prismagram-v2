@@ -48,6 +48,8 @@ model User {
     username      String?   @unique
     emailVerified DateTime?
     image         String?
+    website       String?
+    bio           String?
     followers     User[]    @relation("FollowRelation")
     following     User[]    @relation("FollowRelation")
     accounts      Account[]

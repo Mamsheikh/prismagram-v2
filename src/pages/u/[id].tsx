@@ -28,11 +28,13 @@ import { FaComment } from "react-icons/fa";
 import MobileProfile from "../../components/profile/MobileProfile";
 import DesktopProfile from "../../components/profile";
 import { MdVerified } from "react-icons/md";
+import EditProfileModal from "../../components/User/EditProfileModal";
 
 const LIMIT = 10;
 
 const Profile: React.FC = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [editProfile, setEditProfile] = useState(false);
   const [isOpenFollowing, setIsOpenFollowing] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
@@ -71,7 +73,9 @@ const Profile: React.FC = (props) => {
   function closeFollowingModal() {
     setIsOpenFollowing(false);
   }
-
+  function closeEditProfileModal() {
+    setEditProfile(false);
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function classNames(...classes: (string | undefined)[]) {
     return classes.filter(Boolean).join(" ");
@@ -147,7 +151,7 @@ const Profile: React.FC = (props) => {
                       <IoSettingsOutline className="inline h-6 flex-1 cursor-pointer md:mr-4" />
                     </span>
                     <button
-                      onClick={() => console.log("hello")}
+                      onClick={() => setEditProfile(true)}
                       className="mt-2  rounded-md bg-gray-300 px-3 py-1 font-semibold dark:bg-gray-600 md:max-w-xs"
                     >
                       Edit Profile
@@ -183,6 +187,12 @@ const Profile: React.FC = (props) => {
                 isOpen={isOpenFollowing}
                 closeModal={closeFollowingModal}
                 userId={user.id}
+              />
+
+              <EditProfileModal
+                isOpen={editProfile}
+                closeModal={closeEditProfileModal}
+                user={user}
               />
 
               {/* <!-- user meta form medium screens --> */}
