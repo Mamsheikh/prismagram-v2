@@ -29,6 +29,12 @@ export const favoriteRouter = createTRPCRouter({
             select: {
               id: true,
               image: true,
+              _count: {
+                select: {
+                  likes: true,
+                  comments: true,
+                },
+              },
             },
           },
         },
@@ -44,32 +50,32 @@ export const favoriteRouter = createTRPCRouter({
         nextCursor = nextItem.id;
       }
 
-      const favorites = await Promise.all(
-        postsW.map(async (favorite) => {
-          return {
-            ...favorite,
-            url: await s3.getSignedUrlPromise("getObject", {
-              Bucket: "prismagram-bucket",
-              Key: favorite.post.image,
-            }),
-          };
-        })
-      );
       //   const favorites = await Promise.all(
       //     postsW.map(async (favorite) => {
-      //       let imageUrl = favorite.post.image;
-      //       if (!imageUrl.startsWith("http")) {
-      //         imageUrl = await s3.getSignedUrlPromise("getObject", {
-      //           Bucket: "prismagram-bucket",
-      //           Key: favorite.post.image,
-      //         });
-      //       }
       //       return {
       //         ...favorite,
-      //         url: imageUrl,
+      //         url: await s3.getSignedUrlPromise("getObject", {
+      //           Bucket: "prismagram-bucket",
+      //           Key: favorite.post.image,
+      //         }),
       //       };
       //     })
       //   );
+      const favorites = await Promise.all(
+        postsW.map(async (favorite) => {
+          let imageUrl = favorite.post.image;
+          if (!imageUrl.startsWith("http")) {
+            imageUrl = await s3.getSignedUrlPromise("getObject", {
+              Bucket: "prismagram-bucket",
+              Key: favorite.post.image,
+            });
+          }
+          return {
+            ...favorite,
+            url: imageUrl,
+          };
+        })
+      );
 
       return {
         favorites,

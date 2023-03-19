@@ -67,6 +67,22 @@ const Profile: React.FC = (props) => {
     }
   );
 
+  const {
+    data: favoriteData,
+    fetchNextPage: favoriteFetchNextPage,
+    isLoading: favoriteIsLoading,
+    isFetching: favoriteIsFetching,
+    // isFetchingNextPage,
+    // hasNextPage,
+  } = api.favorite.favorites.useInfiniteQuery(
+    { limit: LIMIT },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      enabled: !!router.isReady,
+    }
+  );
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -81,6 +97,7 @@ const Profile: React.FC = (props) => {
     return classes.filter(Boolean).join(" ");
   }
   const posts = data?.pages.flatMap((page) => page.posts) ?? [];
+  const favorites = favoriteData?.pages.flatMap((page) => page.favorites) ?? [];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,10 +106,12 @@ const Profile: React.FC = (props) => {
         document.documentElement.offsetHeight
       )
         return;
-      if (isLoading || isFetching) return;
+      if (isLoading || isFetching || favoriteIsLoading || favoriteIsFetching)
+        return;
       // setPage(prevPage => prevPage + 1);
       console.log("bottom page");
       fetchNextPage();
+      favoriteFetchNextPage();
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -362,7 +381,51 @@ const Profile: React.FC = (props) => {
                   ))}
                 </Tab.Panel>
                 {session?.user?.id === user.id && (
-                  <Tab.Panel>Content 3</Tab.Panel>
+                  <Tab.Panel>
+                    <div className="-mx-px flex flex-wrap md:-mx-3">
+                      {/* <!-- column --> */}
+                      {favorites &&
+                        favorites.map((favorite) => (
+                          <div key={favorite.id} className="w-1/3 p-px md:px-3">
+                            {/* <!-- post 1--> */}
+                            <Link href={`/p/${favorite.post.id}`}>
+                              <article className="post  pb-full relative bg-gray-100 text-white md:mb-6">
+                                {/* <!-- post image--> */}
+                                <Image
+                                  width={2000}
+                                  height={2000}
+                                  className="absolute left-0 top-0 h-full w-full object-cover"
+                                  src={favorite.url}
+                                  alt="image"
+                                />
+
+                                <i className="fas fa-square absolute right-0 top-0 m-1"></i>
+                                {/* <!-- overlay--> */}
+                                <div
+                                  className="overlay absolute left-0 top-0 hidden h-full 
+                                w-full bg-gray-800 bg-opacity-25"
+                                >
+                                  <div
+                                    className="flex h-full items-center 
+                                    justify-center space-x-4"
+                                  >
+                                    <span className="p-2">
+                                      <AiFillHeart className="text-white" />
+                                      {favorite.post._count.likes}
+                                    </span>
+
+                                    <span className="p-2">
+                                      <FaComment className="text-white" />
+                                      {favorite.post._count.comments}
+                                    </span>
+                                  </div>
+                                </div>
+                              </article>
+                            </Link>
+                          </div>
+                        ))}
+                    </div>
+                  </Tab.Panel>
                 )}
               </Tab.Panels>
             </Tab.Group>
