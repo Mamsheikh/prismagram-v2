@@ -197,17 +197,39 @@ const Profile: React.FC = (props) => {
 
               {/* <!-- user meta form medium screens --> */}
               <div className="hidden md:block">
-                <h1 className="font-semibold">{user.username}</h1>
-                <span>Travel, Nature and Music</span>
-                <p>Lorem ipsum dolor sit amet consectetur</p>
+                <h1 className="font-semibold">{user.name}</h1>
+                <div className="flex flex-col">
+                  <span>{user.bio}</span>
+                  <span>
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={user.website as string}
+                      className="mr-2 text-base font-medium text-blue-700"
+                    >
+                      {user.website}
+                    </a>
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* <!-- user meta form small screens --> */}
             <div className="my-2 text-sm md:hidden">
               <h1 className="font-semibold">{user.username}</h1>
-              <span>Travel, Nature and Music</span>
-              <p>Lorem ipsum dolor sit amet consectetur</p>
+              <div className="flex flex-col">
+                <span>{user.bio}</span>
+                <span>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={user.website as string}
+                    className="mr-2 text-base font-medium text-blue-700"
+                  >
+                    {user.website}
+                  </a>
+                </span>
+              </div>
             </div>
           </header>
 

@@ -24,6 +24,7 @@ export const serverSchema = z.object({
   AWS_ACCESS_KEY_ID: z.string(),
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_REGION: z.string(),
+  CLOUDINARY_SECRET: z.string(),
 });
 
 /**
@@ -41,6 +42,7 @@ export const serverEnv = {
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   AWS_REGION: process.env.AWS_REGION,
+  CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
 };
 
 /**
@@ -49,7 +51,8 @@ export const serverEnv = {
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 export const clientSchema = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string(),
+  NEXT_PUBLIC_CLOUD_NAME: z.string(),
+  NEXT_PUBLIC_CLOUDINARY_KEY: z.string(),
 });
 
 /**
@@ -59,5 +62,6 @@ export const clientSchema = z.object({
  * @type {{ [k in keyof z.infer<typeof clientSchema>]: z.infer<typeof clientSchema>[k] | undefined }}
  */
 export const clientEnv = {
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  NEXT_PUBLIC_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUD_NAME,
+  NEXT_PUBLIC_CLOUDINARY_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_KEY,
 };

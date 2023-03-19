@@ -21,6 +21,7 @@ const config = {
       "cloudflare-ipfs.com",
       "loremflickr.com",
       "picsum.photos",
+      "res.cloudinary.com",
     ],
   },
 };

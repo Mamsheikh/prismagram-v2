@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { z } from "zod";
-
+import { v2 as cloudinary } from "cloudinary";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { env } from "../../../env/server.mjs";
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5; //5MB
 
@@ -25,6 +26,17 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+
+  createImageSignature: protectedProcedure.mutation(() => {
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    const signature: string = cloudinary.utils.api_sign_request(
+      {
+        timestamp,
+      },
+      env.CLOUDINARY_SECRET
+    );
+    return { timestamp, signature };
+  }),
 
   user: protectedProcedure
     .input(z.object({ userId: z.string() }))
@@ -68,6 +80,46 @@ export const userRouter = createTRPCRouter({
         ...user,
         isFollowing,
       };
+    }),
+  updateProfile: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().nullish(),
+        image: z.string().nullish(),
+        bio: z.string().nullish(),
+        website: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { session, prisma } = ctx;
+      const { username, image, bio, website } = input;
+      const { id: userId } = session.user;
+
+      const userUsername = await prisma.user.findFirst({
+        where: {
+          username: username?.toLocaleLowerCase(),
+        },
+      });
+
+      if (userUsername && username !== session.user.username) {
+        throw new TRPCError({
+          code: "METHOD_NOT_SUPPORTED",
+          message: "A user with that username already exists!, Try another",
+        });
+      }
+
+      const user = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          image,
+          bio,
+          website,
+          username,
+        },
+      });
+      return user;
     }),
   follow: protectedProcedure
     .input(z.object({ followId: z.string() }))
@@ -202,7 +254,6 @@ export const userRouter = createTRPCRouter({
         ...follower,
         isFollowing: following.includes(follower.id),
       }));
-      
 
       let nextCursor: string | undefined = undefined;
 
