@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmark, BsChat } from "react-icons/bs";
+import { BsBookmark, BsChat, BsBookmarkFill } from "react-icons/bs";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { type RouterInputs, api, type RouterOutputs } from "../../../utils/api";
 import CreatePostComment from "./CreatePostComment";
@@ -16,6 +16,7 @@ import PostItemHeader from "./PostItemHeader";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
+import toast from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -52,7 +53,7 @@ interface UpdateCacheParams {
   data: {
     userId: string;
   };
-  action: "like" | "unlike";
+  action: "like" | "unlike" | "favorite" | "unfavorite";
 }
 
 function updateCache(params: UpdateCacheParams) {
@@ -96,9 +97,70 @@ function updateCache(params: UpdateCacheParams) {
   );
 }
 
+function updateFavoriteCache(params: UpdateCacheParams) {
+  const { action, client, data, variables, input } = params;
+
+  client.setQueryData(
+    [
+      ["post", "posts"],
+      {
+        input: input,
+        type: "infinite",
+      },
+    ],
+    (prevData) => {
+      const newData = prevData as InfiniteData<RouterOutputs["post"]["posts"]>;
+
+      const newPosts = newData.pages.map((page) => {
+        return {
+          posts: page.posts.map((post) => {
+            if (post.id === variables.postId) {
+              return {
+                ...post,
+                favorites: action === "favorite" ? [data.userId] : [],
+              };
+            }
+            return post;
+          }),
+          nextCursor: page.nextCursor,
+        };
+      });
+
+      return {
+        ...newData,
+        pages: newPosts,
+      };
+    }
+  );
+}
+
 const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
   const { pathname } = useRouter();
   const client = useQueryClient();
+
+  const { mutateAsync: favoriteMutation } = api.favorite.favorite.useMutation({
+    onSuccess: (data, variables) => {
+      updateFavoriteCache({
+        client,
+        input,
+        variables,
+        data,
+        action: "favorite",
+      });
+    },
+  });
+  const { mutateAsync: unFavoriteMutation } =
+    api.favorite.unfavorite.useMutation({
+      onSuccess: (data, variables) => {
+        updateFavoriteCache({
+          client,
+          input,
+          variables,
+          data,
+          action: "unfavorite",
+        });
+      },
+    });
   const likeMutation = api.post.like.useMutation({
     onSuccess: (data, variables) => {
       updateCache({
@@ -123,6 +185,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
   }).mutateAsync;
 
   const hasLiked = post.likes.length > 0;
+  const hasFavored = post.favorites.length > 0;
 
   const handleLike = () => {
     if (hasLiked) {
@@ -132,6 +195,18 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
     likeMutation({
       postId: post.id,
     });
+  };
+
+  const handleFavorite = () => {
+    if (hasFavored) {
+      unFavoriteMutation({ postId: post.id });
+      toast.success("Removed from saved");
+      return;
+    }
+    favoriteMutation({
+      postId: post.id,
+    });
+    toast.success("Post added to saved");
   };
 
   return (
@@ -173,7 +248,11 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
               <BsChat className="postBtn" />
               <IoPaperPlaneOutline className="postBtn" />
             </div>
-            <BsBookmark className="postBtn" />
+            {hasFavored ? (
+              <BsBookmarkFill className="postBtn" onClick={handleFavorite} />
+            ) : (
+              <BsBookmark className="postBtn" onClick={handleFavorite} />
+            )}
           </div>
           <div className="truncate px-4 dark:text-white">
             <p className="mb-1 mr-2 text-sm font-semibold">

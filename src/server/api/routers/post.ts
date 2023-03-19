@@ -4,7 +4,7 @@
 import { z } from "zod";
 import { nanoid } from "nanoid";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { s3 } from "../../../lib/s3";
 import { TRPCError } from "@trpc/server";
 
@@ -91,6 +91,14 @@ export const postRouter = createTRPCRouter({
         orderBy: [{ createdAt: "desc" }],
         include: {
           likes: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
+          favorites: {
             where: {
               userId,
             },
