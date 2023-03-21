@@ -45,7 +45,10 @@ const Dropdown: React.FC<DropdownProps> = ({ image, id }) => {
                 )}
               </Menu.Item>
               <Menu.Item>
-                <button onClick={() => signOut()} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white">
+                <button
+                  onClick={() => signOut()}
+                  className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-white"
+                >
                   Logout
                 </button>
               </Menu.Item>

@@ -2,7 +2,7 @@ import { BsThreeDots, BsBookmark } from "react-icons/bs";
 
 const PostSkeleton = () => {
   return (
-    <div className="relative my-7 mx-auto  max-w-lg rounded-sm bg-white dark:border dark:border-gray-400 dark:bg-black">
+    <div className="relative my-7 mx-auto  max-w-lg rounded-sm border bg-white dark:border-gray-400 dark:bg-black">
       <div className="relative">
         <div className=" flex items-center p-4">
           <div>
