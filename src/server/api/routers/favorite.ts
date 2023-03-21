@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 
 import { s3 } from "../../../lib/s3";
+import { env } from "../../../env/server.mjs";
 
 export const favoriteRouter = createTRPCRouter({
   favorites: protectedProcedure
@@ -50,23 +51,12 @@ export const favoriteRouter = createTRPCRouter({
         nextCursor = nextItem.id;
       }
 
-      //   const favorites = await Promise.all(
-      //     postsW.map(async (favorite) => {
-      //       return {
-      //         ...favorite,
-      //         url: await s3.getSignedUrlPromise("getObject", {
-      //           Bucket: "prismagram-bucket",
-      //           Key: favorite.post.image,
-      //         }),
-      //       };
-      //     })
-      //   );
       const favorites = await Promise.all(
         postsW.map(async (favorite) => {
           let imageUrl = favorite.post.image;
           if (!imageUrl.startsWith("http")) {
             imageUrl = await s3.getSignedUrlPromise("getObject", {
-              Bucket: "prismagram-bucket",
+              Bucket: env.AWS_BUCKET,
               Key: favorite.post.image,
             });
           }
@@ -124,15 +114,10 @@ export const favoriteRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      // const url = await s3.getSignedUrlPromise("getObject", {
-      //   Bucket: "prismagram-bucket",
-      //   Key: postData.image,
-      //   // Expires: 60 // the URL will be valid for 60 seconds
-      // });
       let url = postData.image;
       if (!url.startsWith("http")) {
         url = await s3.getSignedUrlPromise("getObject", {
-          Bucket: "prismagram-bucket",
+          Bucket: env.AWS_BUCKET,
           Key: postData.image,
         });
       }

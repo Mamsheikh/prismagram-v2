@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { s3 } from "../../../lib/s3";
 import { TRPCError } from "@trpc/server";
+import { env } from "../../../env/server.mjs";
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 5; //5MB
 
@@ -21,7 +22,7 @@ export const postRouter = createTRPCRouter({
       const { url, fields } = (await new Promise((resolve, reject) => {
         s3.createPresignedPost(
           {
-            Bucket: "prismagram-bucket",
+            Bucket: env.AWS_BUCKET,
             Fields: { key },
             Expires: 60,
             Conditions: [
@@ -141,24 +142,12 @@ export const postRouter = createTRPCRouter({
         nextCursor = nextItem.id;
       }
 
-      // Each menu items only contains its AWS key. Extend all items with their actual img url
-      // const posts = await Promise.all(
-      //   postsW.map(async (post) => {
-      //     return {
-      //       ...post,
-      //       url: await s3.getSignedUrlPromise("getObject", {
-      //         Bucket: "prismagram-bucket",
-      //         Key: post.image,
-      //       }),
-      //     };
-      //   })
-      // );
       const posts = await Promise.all(
         postsW.map(async (post) => {
           let imageUrl = post.image;
           if (!imageUrl.startsWith("http")) {
             imageUrl = await s3.getSignedUrlPromise("getObject", {
-              Bucket: "prismagram-bucket",
+              Bucket: env.AWS_BUCKET,
               Key: post.image,
             });
           }
