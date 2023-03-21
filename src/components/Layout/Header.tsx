@@ -6,12 +6,14 @@ import {
   AiOutlineHome,
   AiOutlineMenu,
   AiOutlinePlusSquare,
+  AiOutlineSearch,
 } from "react-icons/ai";
 import { BsFillSunFill, BsInstagram } from "react-icons/bs";
 import { MdOutlineNightlight } from "react-icons/md";
 import CreatePostModal from "../Home/Posts/CreatePostModal";
 import Dropdown from "../common/ProfileDropdown";
 import { useEffect, useState } from "react";
+import SearchUsersModal from "../User/SearchUsersModal";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -28,7 +30,16 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isOpenSearch, setIsOpenSearch] = useState(false);
   const currentTheme = theme === "system" ? systemTheme : theme;
+
+  function openModalSearch() {
+    setIsOpenSearch(true);
+  }
+
+  function closeModalSearch() {
+    setIsOpenSearch(false);
+  }
 
   useEffect(() => {
     setMounted(true);
@@ -52,9 +63,16 @@ const Header: React.FC<HeaderProps> = ({
             />
           </Link>
         </div>
-        {/* Search Input TODO: */}
-        {/* <Search /> */}
-        <div className="flex items-center justify-end space-x-4">
+        {/* Search  */}
+        <button
+          onClick={openModalSearch}
+          className="hidden w-full max-w-[10rem] items-center rounded-lg border  bg-gray-100 py-2 pl-2 text-sm md:flex "
+        >
+          <AiOutlineSearch className="mr-4 h-4 w-4 " />
+          Search
+        </button>
+        <SearchUsersModal isOpen={isOpenSearch} closeModal={closeModalSearch} />
+        <div className="flex items-center justify-end px-3 md:space-x-4">
           <Link href="/">
             <AiOutlineHome className="navBtn" />
           </Link>

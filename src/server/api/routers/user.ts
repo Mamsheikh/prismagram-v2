@@ -353,4 +353,23 @@ export const userRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
+  searchUsers: protectedProcedure
+    .input(z.object({ searchUsername: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { session, prisma } = ctx;
+      const { searchUsername } = input;
+
+      const { username: myUsername } = session.user;
+
+      return await prisma.user.findMany({
+        where: {
+          username: {
+            contains: searchUsername,
+            not: myUsername,
+            // mode: "insensitive",
+          },
+        },
+      });
+    }),
 });
