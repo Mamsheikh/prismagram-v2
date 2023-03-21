@@ -1,10 +1,5 @@
-// import {
-//     HomeIcon,
-//     MenuIcon,
-//     MoonIcon,
-//     SunIcon,
-//   } from '@heroicons/react/outline';
-import { useSession } from "next-auth/react";
+import { type Session } from "next-auth";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import {
   AiOutlineCompass,
@@ -13,11 +8,10 @@ import {
   AiOutlinePlusSquare,
 } from "react-icons/ai";
 import { BsFillSunFill, BsInstagram } from "react-icons/bs";
-import CreatePostModal from "../Home/Posts/CreatePostModal";
-import { type Session } from "next-auth";
-import { useTheme } from "next-themes";
-import Dropdown from "../common/ProfileDropdown";
 import { MdOutlineNightlight } from "react-icons/md";
+import CreatePostModal from "../Home/Posts/CreatePostModal";
+import Dropdown from "../common/ProfileDropdown";
+import { useEffect, useState } from "react";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -33,7 +27,12 @@ const Header: React.FC<HeaderProps> = ({
   session,
 }) => {
   const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const currentTheme = theme === "system" ? systemTheme : theme;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-gray-900">
       <div className="mx-auto flex max-w-4xl justify-between p-2  text-black xl:mx-auto">
@@ -61,23 +60,25 @@ const Header: React.FC<HeaderProps> = ({
           </Link>
 
           <AiOutlineMenu className="h-6 md:hidden" />
-          <div
-            onClick={() =>
-              theme == "dark" ? setTheme("light") : setTheme("dark")
-            }
-          >
-            {theme === "light" ? (
-              // <MoonIcon className='navBtn' />
-              <span>
-                <MdOutlineNightlight className="navBtn" />
-              </span>
-            ) : (
-              <span>
-                {/* <SunIcon /> */}
-                <BsFillSunFill className="navBtn" />
-              </span>
-            )}
-          </div>
+          {mounted && (
+            <div
+              onClick={() =>
+                theme == "dark" ? setTheme("light") : setTheme("dark")
+              }
+            >
+              {theme === "light" ? (
+                // <MoonIcon className='navBtn' />
+                <span>
+                  <MdOutlineNightlight className="navBtn" />
+                </span>
+              ) : (
+                <span>
+                  {/* <SunIcon /> */}
+                  <BsFillSunFill className="navBtn" />
+                </span>
+              )}
+            </div>
+          )}
           {session ? (
             <>
               {/* <div className='navBtn relative'>

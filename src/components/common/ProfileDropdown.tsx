@@ -1,4 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
@@ -44,9 +45,9 @@ const Dropdown: React.FC<DropdownProps> = ({ image, id }) => {
                 )}
               </Menu.Item>
               <Menu.Item>
-                <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white">
+                <button onClick={() => signOut()} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white">
                   Logout
-                </a>
+                </button>
               </Menu.Item>
             </Menu.Items>
           </Transition>
