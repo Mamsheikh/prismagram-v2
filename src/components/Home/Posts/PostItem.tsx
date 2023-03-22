@@ -185,7 +185,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
   }).mutateAsync;
 
   const hasLiked = post.likes.length > 0;
-  const hasFavored = post.favorites.length > 0;
 
   const handleLike = () => {
     if (hasLiked) {
@@ -197,6 +196,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
     });
   };
 
+  const hasFavored = post.favorites.length > 0;
   const handleFavorite = () => {
     if (hasFavored) {
       unFavoriteMutation({ postId: post.id });

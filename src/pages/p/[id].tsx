@@ -17,9 +17,10 @@ import CreatePostComment from "../../components/Home/Posts/CreatePostComment";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
-import { BsChat, BsBookmark } from "react-icons/bs";
+import { BsChat, BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -80,6 +81,46 @@ const Post: React.FC = (props) => {
       utils.post.post.invalidate();
     },
   }).mutateAsync;
+
+  const { mutateAsync: favoriteMutation } = api.favorite.favorite.useMutation({
+    onSuccess: (data, variables) => {
+      utils.post.post.invalidate();
+      // updateFavoriteCache({
+      //   client,
+      //   input,
+      //   variables,
+      //   data,
+      //   action: "favorite",
+      // });
+    },
+  });
+  const { mutateAsync: unFavoriteMutation } =
+    api.favorite.unfavorite.useMutation({
+      onSuccess: (data, variables) => {
+        utils.post.post.invalidate();
+        // updateFavoriteCache({
+        //   client,
+        //   input,
+        //   variables,
+        //   data,
+        //   action: "unfavorite",
+        // });
+      },
+    });
+
+  const hasFavored = post && post.favorites.length > 0;
+  const handleFavorite = () => {
+    if (!post) return;
+    if (hasFavored) {
+      unFavoriteMutation({ postId: post.id });
+      toast.success("Removed from saved");
+      return;
+    }
+    favoriteMutation({
+      postId: post.id,
+    });
+    toast.success("Post added to saved");
+  };
 
   const hasLiked = post && post.likes.length > 0;
 
@@ -236,7 +277,17 @@ const Post: React.FC = (props) => {
                       <BsChat className="postBtn" />
                       <IoPaperPlaneOutline className="postBtn" />
                     </div>
-                    <BsBookmark className="postBtn" />
+                    {hasFavored ? (
+                      <BsBookmarkFill
+                        className="postBtn"
+                        onClick={handleFavorite}
+                      />
+                    ) : (
+                      <BsBookmark
+                        className="postBtn"
+                        onClick={handleFavorite}
+                      />
+                    )}
                   </div>
                   <div className="truncate px-4 dark:text-white">
                     <p className="mb-1 mr-2 text-sm font-semibold">

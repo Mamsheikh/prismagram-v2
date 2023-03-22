@@ -192,6 +192,14 @@ export const postRouter = createTRPCRouter({
               userId: true,
             },
           },
+          favorites: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
           _count: {
             select: {
               likes: true,

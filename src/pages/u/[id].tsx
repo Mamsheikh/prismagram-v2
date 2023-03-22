@@ -424,6 +424,11 @@ const Profile: React.FC = (props) => {
                             </Link>
                           </div>
                         ))}
+                      {!favorites && (
+                        <div className="flex h-screen items-center text-center">
+                          No favorites
+                        </div>
+                      )}
                     </div>
                   </Tab.Panel>
                 )}
