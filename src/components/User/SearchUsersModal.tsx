@@ -12,7 +12,7 @@ export default function MyModal({
   closeModal: () => void;
 }) {
   const [username, setUsername] = useState("");
-  const { data, isLoading } = api.user.searchUsers.useQuery(
+  const { data, isLoading, isFetching } = api.user.searchUsers.useQuery(
     {
       searchUsername: username,
     },
@@ -20,6 +20,7 @@ export default function MyModal({
       enabled: !!username,
     }
   );
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -47,7 +48,7 @@ export default function MyModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className=" w-full max-w-xs transform overflow-hidden rounded bg-white text-left  align-middle shadow-xl transition-all md:max-w-xl">
+                <Dialog.Panel className=" w-full max-w-xs transform overflow-hidden rounded bg-white text-left align-middle  shadow-xl transition-all dark:bg-gray-900 md:max-w-xl">
                   <div className="">
                     <div className="flex w-full items-center border-b px-4">
                       <CiSearch />
@@ -56,7 +57,7 @@ export default function MyModal({
                         placeholder="Search users"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full  border-transparent focus:border-transparent focus:ring-0"
+                        className="w-full  border-transparent focus:border-transparent focus:ring-0 dark:bg-gray-900"
                       />
                     </div>
                     <div className="h-[406px] overflow-hidden overflow-y-auto pb-6  scrollbar-thin scrollbar-thumb-slate-500">
@@ -95,23 +96,18 @@ export default function MyModal({
                             </div>
                           </div>
                         ))}
-                      {isLoading && (
+                      {isFetching ? (
                         <div className="mt-20 flex items-center justify-center">
                           Loading...
                         </div>
-                      )}
+                      ) : null}
 
-                      {!data && (
+                      {!isLoading && !data && (
                         <div className="mt-20 flex items-center justify-center">
                           No user found
                         </div>
                       )}
                     </div>
-                    {/* <div className="flex justify-end">
-                      <button className="rounded-md bg-blue-500 px-4 py-2 text-white">
-                        Close
-                      </button>
-                    </div> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
