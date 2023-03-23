@@ -13,6 +13,7 @@ import { FaComment } from "react-icons/fa";
 import { IoMdGrid } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdVerified } from "react-icons/md";
+import { RingLoader } from "react-spinners";
 import PostItem from "../../components/Home/Posts/PostItem";
 import Layout from "../../components/Layout";
 import EditProfileModal from "../../components/User/EditProfileModal";
@@ -113,8 +114,18 @@ const Profile: React.FC = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isFetching]);
 
-  if (!user || isLoading) {
-    return <div>Loading user profile....</div>;
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex h-screen items-center justify-center ">
+          <RingLoader />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    return <div>Something went wrong😢</div>;
   }
   return (
     <Layout>
