@@ -372,4 +372,22 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+
+  userSuggesstions: protectedProcedure
+    // .input(z.object({ searchUsername: z.string() }))
+    .query(async ({ ctx }) => {
+      const { session, prisma } = ctx;
+      // const { searchUsername } = input;
+
+      const { username: myUsername } = session.user;
+
+      return await prisma.user.findMany({
+        where: {
+          username: {
+            not: myUsername,
+          },
+        },
+        take: 5,
+      });
+    }),
 });

@@ -5,6 +5,8 @@ import Layout from "../Layout";
 import PostItem from "./Posts/PostItem";
 import { SyncLoader } from "react-spinners";
 import PostSkeleton from "./Posts/PostSkeleton";
+import MiniProfile from "./MiniProfile";
+import Suggestions from "./Suggestions";
 
 const LIMIT = 10;
 
@@ -12,7 +14,7 @@ type FeedProps = {
   session: Session | null;
 };
 
-const Feed: React.FC<FeedProps> = () => {
+const Feed: React.FC<FeedProps> = ({ session }) => {
   const {
     data,
     fetchNextPage,
@@ -81,8 +83,8 @@ const Feed: React.FC<FeedProps> = () => {
           </section>
           <section className=" md:col-span-1 md:hidden xl:inline-grid">
             <div className="fixed">
-              {/* <MiniProfile /> */}
-              {/* <Suggestions /> */}
+              <MiniProfile session={session} />
+              <Suggestions />
             </div>
           </section>
         </div>
