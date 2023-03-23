@@ -1,34 +1,25 @@
 /* eslint-disable react/jsx-no-undef */
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { FiMoreHorizontal } from "react-icons/fi";
 import { CgDisplayFullwidth } from "react-icons/cg";
-
-import toast from "react-hot-toast";
-
 import Image from "next/image";
-import Layout from "../../components/Layout";
-
-import { IoSettingsOutline } from "react-icons/io5";
-import Head from "next/head";
-import { BsBookmark } from "react-icons/bs";
-import { IoMdGrid } from "react-icons/io";
-import { useSession } from "next-auth/react";
-import { api } from "../../utils/api";
-import FollowBtn from "../../components/common/FollowBtn";
-import { useQueryClient } from "@tanstack/react-query";
-import FollowersModal from "../../components/User/FollowersModal";
-import FollowingModal from "../../components/User/FollowingModal";
 import { Tab } from "@headlessui/react";
-import PostItem from "../../components/Home/Posts/PostItem";
+import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Link from "next/link";
 import { AiFillHeart } from "react-icons/ai";
+import { BsBookmark } from "react-icons/bs";
 import { FaComment } from "react-icons/fa";
-import MobileProfile from "../../components/profile/MobileProfile";
-import DesktopProfile from "../../components/profile";
+import { IoMdGrid } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
 import { MdVerified } from "react-icons/md";
+import PostItem from "../../components/Home/Posts/PostItem";
+import Layout from "../../components/Layout";
 import EditProfileModal from "../../components/User/EditProfileModal";
+import FollowersModal from "../../components/User/FollowersModal";
+import FollowingModal from "../../components/User/FollowingModal";
+import FollowBtn from "../../components/common/FollowBtn";
+import { api } from "../../utils/api";
 
 const LIMIT = 10;
 
@@ -367,6 +358,11 @@ const Profile: React.FC = (props) => {
                           </Link>
                         </div>
                       ))}
+                    {posts.length === 0 && (
+                      <div className="mx-auto flex w-full max-w-md items-center justify-center p-10 text-center">
+                        <span className="text-center">No posts</span>
+                      </div>
+                    )}
                   </div>
                 </Tab.Panel>
                 <Tab.Panel>
@@ -379,57 +375,19 @@ const Profile: React.FC = (props) => {
                       }}
                     />
                   ))}
+                  {posts.length === 0 && (
+                    <div className="mx-auto flex w-full max-w-md items-center justify-center p-10 text-center">
+                      <span className="text-center">No posts</span>
+                    </div>
+                  )}
                 </Tab.Panel>
                 {session?.user?.id === user.id && (
                   <Tab.Panel>
-                    <div className="-mx-px flex flex-wrap md:-mx-3">
-                      {/* <!-- column --> */}
-                      {favorites &&
-                        favorites.map((favorite) => (
-                          <div key={favorite.id} className="w-1/3 p-px md:px-3">
-                            {/* <!-- post 1--> */}
-                            <Link href={`/p/${favorite.post.id}`}>
-                              <article className="post  pb-full relative bg-gray-100 text-white md:mb-6">
-                                {/* <!-- post image--> */}
-                                <Image
-                                  width={2000}
-                                  height={2000}
-                                  className="absolute left-0 top-0 h-full w-full object-cover"
-                                  src={favorite.url}
-                                  alt="image"
-                                />
-
-                                <i className="fas fa-square absolute right-0 top-0 m-1"></i>
-                                {/* <!-- overlay--> */}
-                                <div
-                                  className="overlay absolute left-0 top-0 hidden h-full 
-                                w-full bg-gray-800 bg-opacity-25"
-                                >
-                                  <div
-                                    className="flex h-full items-center 
-                                    justify-center space-x-4"
-                                  >
-                                    <span className="p-2">
-                                      <AiFillHeart className="text-white" />
-                                      {favorite.post._count.likes}
-                                    </span>
-
-                                    <span className="p-2">
-                                      <FaComment className="text-white" />
-                                      {favorite.post._count.comments}
-                                    </span>
-                                  </div>
-                                </div>
-                              </article>
-                            </Link>
-                          </div>
-                        ))}
-                      {!favorites && (
-                        <div className="flex h-screen items-center text-center">
-                          No favorites
-                        </div>
-                      )}
-                    </div>
+                    {favorites.length === 0 && (
+                      <div className="mx-auto flex w-full max-w-md items-center justify-center p-10 text-center">
+                        <span className="text-center">No favorites</span>
+                      </div>
+                    )}
                   </Tab.Panel>
                 )}
               </Tab.Panels>

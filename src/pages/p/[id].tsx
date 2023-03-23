@@ -21,6 +21,7 @@ import { BsChat, BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import SinglePostSkeleton from "../../components/Home/Posts/SinglePostSkeleton";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -83,7 +84,7 @@ const Post: React.FC = (props) => {
   }).mutateAsync;
 
   const { mutateAsync: favoriteMutation } = api.favorite.favorite.useMutation({
-    onSuccess: (data, variables) => {
+    onSuccess: () => {
       utils.post.post.invalidate();
       // updateFavoriteCache({
       //   client,
@@ -96,7 +97,7 @@ const Post: React.FC = (props) => {
   });
   const { mutateAsync: unFavoriteMutation } =
     api.favorite.unfavorite.useMutation({
-      onSuccess: (data, variables) => {
+      onSuccess: () => {
         utils.post.post.invalidate();
         // updateFavoriteCache({
         //   client,
@@ -135,8 +136,16 @@ const Post: React.FC = (props) => {
     });
   };
 
-  if (!post || isLoading) {
-    return <div>Loading....</div>;
+  if (isLoading) {
+    return (
+      <Layout>
+        <SinglePostSkeleton />
+      </Layout>
+    );
+  }
+
+  if (!post) {
+    return <div>error....</div>;
   }
   const comments = data?.pages.flatMap((page) => page.comments) ?? [];
   const fileteredUserPosts = userPosts?.posts.filter(
@@ -144,6 +153,7 @@ const Post: React.FC = (props) => {
   );
   return (
     <Layout>
+      {/* {isLoading && <SinglePostSkeleton />} */}
       <div className=" mx-auto  overflow-y-auto p-10 pt-20 dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto">
         <div className="relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900">
           {/* header */}
