@@ -6,8 +6,8 @@ import React from "react";
 
 const LoginForm: React.FC = () => {
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gray-100 ">
-      <div className=" flex w-full max-w-md flex-col items-center border-gray-300 py-8   pb-4 sm:border sm:bg-white">
+    <div className="flex h-screen flex-col items-center justify-center bg-gray-100 dark:bg-gray-800">
+      <div className=" flex w-full max-w-md flex-col items-center border-gray-300 py-8   pb-4 dark:bg-gray-900 sm:border sm:bg-white">
         <h2
           className=" mb-4 text-gray-800 dark:text-white"
           style={{ fontFamily: "Grand Hotel", fontSize: "3rem" }}
@@ -16,7 +16,7 @@ const LoginForm: React.FC = () => {
         </h2>
         <button
           type="button"
-          className="dark:focus:ring-[#4285F4]/55 mr-2  mb-5 inline-flex items-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50"
+          className="dark:focus:ring-[#4285F4]/55 mr-2  mb-5 inline-flex items-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50 hover:bg-[#4285F4]/90"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={() => signIn("google")}
         >
