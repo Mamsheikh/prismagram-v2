@@ -290,7 +290,7 @@ const Profile: React.FC = (props) => {
                       "flex w-full items-center justify-center  py-2.5 text-sm font-medium leading-5 text-gray-700 focus:outline-none",
                       selected
                         ? "border-3 border-gray-500 text-blue-500"
-                        : "text-gray-500 hover:bg-white/[0.12] hover:text-white"
+                        : "text-gray-500 hover:bg-gray-300 dark:hover:bg-white/[0.12] dark:hover:text-white"
                     )
                   }
                 >
@@ -303,7 +303,7 @@ const Profile: React.FC = (props) => {
                       " focus:outline-none ",
                       selected
                         ? "text-blue-500"
-                        : "text-gray-500 hover:bg-white/[0.12] hover:text-white"
+                        : "text-gray-500 hover:bg-gray-300 dark:hover:bg-white/[0.12] dark:hover:text-white"
                     )
                   }
                 >
@@ -317,7 +317,7 @@ const Profile: React.FC = (props) => {
                         " focus:outline-none ",
                         selected
                           ? "text-blue-500"
-                          : "text-gray-500 hover:bg-white/[0.12] hover:text-white"
+                          : "text-gray-500 hover:bg-gray-300 dark:hover:bg-white/[0.12] dark:hover:text-white"
                       )
                     }
                   >
@@ -394,6 +394,54 @@ const Profile: React.FC = (props) => {
                 </Tab.Panel>
                 {session?.user?.id === user.id && (
                   <Tab.Panel>
+                    <div className="-mx-px flex flex-wrap md:-mx-3">
+                      {/* <!-- column --> */}
+                      {favorites &&
+                        favorites.map((favorite) => (
+                          <div key={favorite.id} className="w-1/3 p-px md:px-3">
+                            {/* <!-- post 1--> */}
+                            <Link href={`/p/${favorite.post.id}`}>
+                              <article className="post  pb-full relative bg-gray-100 text-white md:mb-6">
+                                {/* <!-- post image--> */}
+                                <Image
+                                  width={2000}
+                                  height={2000}
+                                  className="absolute left-0 top-0 h-full w-full object-cover"
+                                  src={favorite.url}
+                                  alt="image"
+                                />
+
+                                <i className="fas fa-square absolute right-0 top-0 m-1"></i>
+                                {/* <!-- overlay--> */}
+                                <div
+                                  className="overlay absolute left-0 top-0 hidden h-full 
+                                w-full bg-gray-800 bg-opacity-25"
+                                >
+                                  <div
+                                    className="flex h-full items-center 
+                                    justify-center space-x-4"
+                                  >
+                                    <span className="p-2">
+                                      <AiFillHeart className="text-white" />
+                                      {favorite.post._count.likes}
+                                    </span>
+
+                                    <span className="p-2">
+                                      <FaComment className="text-white" />
+                                      {favorite.post._count.comments}
+                                    </span>
+                                  </div>
+                                </div>
+                              </article>
+                            </Link>
+                          </div>
+                        ))}
+                      {posts.length === 0 && (
+                        <div className="mx-auto flex w-full max-w-md items-center justify-center p-10 text-center">
+                          <span className="text-center">No posts</span>
+                        </div>
+                      )}
+                    </div>
                     {favorites.length === 0 && (
                       <div className="mx-auto flex w-full max-w-md items-center justify-center p-10 text-center">
                         <span className="text-center">No favorites</span>
