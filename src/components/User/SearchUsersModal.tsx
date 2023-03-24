@@ -102,7 +102,7 @@ export default function MyModal({
                         </div>
                       ) : null}
 
-                      {!isLoading && !data && (
+                      {data && data.length === 0 && (
                         <div className="mt-20 flex items-center justify-center">
                           No user found
                         </div>
