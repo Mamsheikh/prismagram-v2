@@ -111,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div> */}
 
               <AiOutlinePlusSquare onClick={openModal} className="navBtn" />
-              <Link href="/explore">
+              <Link href="#">
                 <AiOutlineCompass className="navBtn" />
               </Link>
 
