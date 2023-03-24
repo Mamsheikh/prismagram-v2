@@ -1,28 +1,44 @@
-# Create T3 App
+# Prismagram-v2
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Prismagram-v2 is a social media app built using the T3 stack (Tailwind, TRPC, Typescript, Next.js, Prisma) and Supabase's PostgreSQL for data storage. The app is hosted on Vercel. This version is an improvement of the original version that used GraphQL.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- User authentication
+- User profiles
+- User can post images
+- User can like and comment on posts
+- Light and dark mode
+- Fully mobile responsive
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Technologies Used
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [TRPC](https://trpc.io/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [Supabase](https://supabase.io/)
+- [Vercel](https://vercel.com/)
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+To get started with this project, you will need to:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. Clone the repository: `git clone https://github.com/Mamsheikh/prismagram-v2.git`
+2. Install dependencies: `npm install`
+3. Set up your Supabase account and configure the PostgreSQL database
+4. Set up your environment variables: `cp .env.example .env.local` and add your Supabase credentials
+5. Run the development server: `npm run dev`
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Deployment
 
-## How do I deploy this?
+To deploy your own instance of Prismagram-v2, you can follow the steps below:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. Set up your Vercel account
+2. Configure your environment variables for production: `vercel env add`
+3. Deploy your app to Vercel: `vercel`
+
+## License
+
+Prismagram-v2 is released under the [MIT License](https://opensource.org/licenses/MIT).
