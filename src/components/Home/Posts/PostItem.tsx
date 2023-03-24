@@ -239,7 +239,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
               {hasLiked ? (
                 <AiFillHeart
                   onClick={handleLike}
-                  className="postBtn text-red-500"
+                  className="postBtn text-red-500 dark:text-red-500"
                 />
               ) : (
                 <AiOutlineHeart onClick={handleLike} className="postBtn" />
