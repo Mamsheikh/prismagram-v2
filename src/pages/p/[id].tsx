@@ -155,7 +155,7 @@ const Post: React.FC = (props) => {
     <Layout>
       {/* {isLoading && <SinglePostSkeleton />} */}
       <div className=" mx-auto  overflow-y-auto p-10 pt-20 dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto">
-        <div className="relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900">
+        <div className="relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900 border">
           {/* header */}
           <header className="static top-0 right-0 flex h-14 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l">
             <div className="flex items-center">
