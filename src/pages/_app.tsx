@@ -11,6 +11,8 @@ import "nprogress/nprogress.css";
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import Script from "next/script";
+import { env } from "../env/client.mjs";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -25,6 +27,22 @@ const MyApp: AppType<{ session: Session | null }> = ({
           stopDelayMs={200}
           height={4}
         />
+        <Script
+          strategy="lazyOnload"
+          src={`https://www.googletagmanager.com/gtag/js?id=${env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+        />
+
+        <Script id="google-analytics" strategy="lazyOnload">
+          {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+        page_path: window.location.pathname,
+        });
+        
+    `}
+        </Script>
         <Component {...pageProps} />
         <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
