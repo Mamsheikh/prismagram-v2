@@ -75,7 +75,7 @@ const Feed: React.FC<FeedProps> = ({ session }) => {
             ))}
 
             <div className="mx-auto my-10 flex items-center justify-center pb-10">
-              {true && <SyncLoader color="#4B5563" />}
+              {isFetchingNextPage && <SyncLoader color="#4B5563" />}
               {!hasNextPage && (
                 <p className="text-sm text-gray-600 ">No more posts</p>
               )}
