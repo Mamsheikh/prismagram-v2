@@ -277,4 +277,86 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+
+  updatePost: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        caption: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { session, prisma } = ctx;
+      const { postId, caption } = input;
+      const { id: userId } = session.user;
+
+      const post = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
+      }
+
+      if (post.user.id !== userId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Not authorized" });
+      }
+
+      return await prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          caption,
+        },
+      });
+    }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { session, prisma } = ctx;
+      const { postId } = input;
+      const { id: userId } = session.user;
+
+      const post = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
+      }
+
+      if (post.user.id !== userId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Not authorized" });
+      }
+
+      return await prisma.post.delete({
+        where: {
+          id: post.id,
+        },
+      });
+    }),
 });

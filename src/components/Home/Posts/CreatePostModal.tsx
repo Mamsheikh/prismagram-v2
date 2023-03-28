@@ -12,13 +12,11 @@ import {
 } from "react";
 import { FiImage } from "react-icons/fi";
 import { FileDrop } from "react-file-drop";
-import Image from "next/image";
-import { MAX_FILE_SIZE } from "../../../server/api/routers/user";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
 import { api } from "../../../utils/api";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -42,7 +40,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 }) => {
   // const [file, setFile] = useState<File | undefined>();
   const [input, setInput] = useState(initialInput);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState("");
   const [isFileNearBy, setIsFileNearBy] = useState<boolean>(false);
