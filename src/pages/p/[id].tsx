@@ -22,6 +22,9 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import SinglePostSkeleton from "../../components/Home/Posts/SinglePostSkeleton";
+import { useState } from "react";
+import PostActionButtonsModal from "../../components/Home/Posts/PostActionButtonsModal";
+import { DeletePostConfirmationModal } from "../../components/Home/Posts/PostItem";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocal);
@@ -47,6 +50,16 @@ dayjs.updateLocale("en", {
 const Post: React.FC = (props) => {
   const router = useRouter();
   const utils = api.useContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function closeModalDelete() {
+    setIsOpenDelete(false);
+  }
   const { data: post, isLoading } = api.post.post.useQuery(
     { postId: router.query.id as string },
     { refetchOnWindowFocus: false, enabled: !!router.isReady }
@@ -155,7 +168,7 @@ const Post: React.FC = (props) => {
     <Layout>
       {/* {isLoading && <SinglePostSkeleton />} */}
       <div className=" mx-auto  overflow-y-auto p-10 pt-20 dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto">
-        <div className="relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900 border">
+        <div className="relative mb-10 flex h-full flex-col border bg-white dark:bg-gray-900">
           {/* header */}
           <header className="static top-0 right-0 flex h-14 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l">
             <div className="flex items-center">
@@ -176,9 +189,22 @@ const Post: React.FC = (props) => {
 
             <FiMoreHorizontal
               className="h-5 w-5 cursor-pointer"
-              //   onClick={() => setOpen(!open)}
+              onClick={() => setIsOpen(true)}
             />
           </header>
+          <PostActionButtonsModal
+            isOpen={isOpen}
+            closeModal={closeModal}
+            post={post}
+            hasFavored={hasFavored}
+            handleFavorite={handleFavorite}
+            setIsOpenDelete={setIsOpenDelete}
+          />
+          <DeletePostConfirmationModal
+            isOpen={isOpenDelete}
+            closeModalDelete={closeModalDelete}
+            postId={post.id}
+          />
           {/* Media */}
           <div className="  h-full  max-w-xl  flex-1 bg-gray-800 md:mr-80">
             <Image

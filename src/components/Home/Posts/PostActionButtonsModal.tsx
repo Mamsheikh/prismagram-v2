@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { type RouterOutputs } from "../../../utils/api";
 import toast from "react-hot-toast";
 import { env } from "../../../env/client.mjs";
+import Link from "next/link";
 
 function PostActionButtonsModal({
   isOpen,
@@ -11,14 +12,19 @@ function PostActionButtonsModal({
   post,
   hasFavored,
   handleFavorite,
+  setIsOpenDelete,
 }: {
   isOpen: boolean;
   closeModal: () => void;
-  post: RouterOutputs["post"]["posts"]["posts"][number];
-  hasFavored: boolean;
+  post:
+    | RouterOutputs["post"]["posts"]["posts"][number]
+    | RouterOutputs["post"]["post"];
+  hasFavored: boolean | undefined;
   handleFavorite: () => void;
+  setIsOpenDelete: (isOpenDelete: boolean) => void;
 }) {
   const { data: session } = useSession();
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -54,7 +60,10 @@ function PostActionButtonsModal({
                         <button
                           type="button"
                           className="inline-flex justify-center border  px-4 py-2 text-sm  font-medium text-red-500 focus:outline-none focus:ring-0 "
-                          //   onClick={discard}
+                          onClick={() => {
+                            setIsOpenDelete(true);
+                            closeModal();
+                          }}
                         >
                           Delete
                         </button>
@@ -75,6 +84,7 @@ function PostActionButtonsModal({
                           `${env.NEXT_PUBLIC_URL}/p/${post.id}`
                         );
                         toast.success("link copied to clipboard");
+                        closeModal();
                       }}
                     >
                       Copy link
@@ -82,9 +92,8 @@ function PostActionButtonsModal({
                     <button
                       type="button"
                       className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
-                      onClick={closeModal}
                     >
-                      Go to post
+                      <Link href={`/p/${post.id}`}>Go to post</Link>
                     </button>
                     {post?.user?.id !== session?.user?.id && (
                       <button
@@ -97,7 +106,7 @@ function PostActionButtonsModal({
                     )}
                     <button
                       type="button"
-                      className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center  border px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
                       onClick={closeModal}
                     >
                       Cancel

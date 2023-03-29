@@ -8,14 +8,16 @@ import PostActionButtonsModal from "./PostActionButtonsModal";
 
 interface PostItemHeaderProps {
   post: RouterOutputs["post"]["posts"]["posts"][number];
-  hasFavored: boolean;
+  hasFavored: boolean | undefined;
   handleFavorite: () => void;
+  setIsOpenDelete: (isOpenDelete: boolean) => void;
 }
 
 const PostItemHeader: React.FC<PostItemHeaderProps> = ({
   post,
   hasFavored,
   handleFavorite,
+  setIsOpenDelete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,6 +57,7 @@ const PostItemHeader: React.FC<PostItemHeaderProps> = ({
         post={post}
         hasFavored={hasFavored}
         handleFavorite={handleFavorite}
+        setIsOpenDelete={setIsOpenDelete}
       />
     </div>
   );

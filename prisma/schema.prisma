@@ -83,7 +83,7 @@ model Post {
 
 model Like {
     id        String   @id @default(cuid())
-    post      Post     @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
@@ -95,7 +95,7 @@ model Like {
 
 model Favorite {
     id        String   @id @default(cuid())
-    post      Post     @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
@@ -108,7 +108,7 @@ model Favorite {
 model Comment {
     id        String   @id @default(cuid())
     content   String
-    post      Post     @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
     user      User     @relation(fields: [userId], references: [id])
     userId    String
