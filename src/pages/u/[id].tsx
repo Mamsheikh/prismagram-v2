@@ -237,7 +237,7 @@ const Profile: React.FC = (props) => {
 
             {/* <!-- user meta form small screens --> */}
             <div className="my-2 text-sm md:hidden">
-              <h1 className="font-semibold">{user.username}</h1>
+              <h1 className="font-semibold">{user.name}</h1>
               <div className="flex flex-col">
                 <span>{user.bio}</span>
                 <span>

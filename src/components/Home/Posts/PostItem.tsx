@@ -139,7 +139,7 @@ function updateFavoriteCache(params: UpdateCacheParams) {
 
 const PostItem: React.FC<PostItemProps> = ({ post, input }) => {
   const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const utils = api.useContext();
+  // const utils = api.useContext();
 
   function closeModalDelete() {
     setIsOpenDelete(false);
@@ -378,15 +378,15 @@ export function DeletePostConfirmationModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left  align-middle shadow-xl transition-all dark:bg-gray-900">
                   <Dialog.Title
                     as="h3"
-                    className="px-6 pt-6  text-center text-lg font-medium leading-6 text-gray-900"
+                    className="px-6 pt-6  text-center text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
                   >
                     Delete post?
                   </Dialog.Title>
                   <div className="mt-2 ">
-                    <p className="text-center text-sm text-gray-500">
+                    <p className="text-center text-sm text-gray-500 dark:text-gray-100">
                       Are you sure you want to delete this post?
                     </p>
                   </div>
@@ -394,14 +394,14 @@ export function DeletePostConfirmationModal({
                   <div className="mt-4 flex w-full flex-col">
                     <button
                       type="button"
-                      className="inline-flex justify-center border  px-4 py-2 text-sm  font-medium text-red-500 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center border-y  px-4 py-2 text-sm  font-medium text-red-500 focus:outline-none focus:ring-0 "
                       onClick={() => handleDeletePost(postId)}
                     >
                       Delete
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-gray-100 "
                       onClick={closeModalDelete}
                     >
                       Cancel

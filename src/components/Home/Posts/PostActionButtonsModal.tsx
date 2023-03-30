@@ -52,14 +52,14 @@ function PostActionButtonsModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left  align-middle shadow-xl transition-all dark:bg-gray-900">
                   <div className=" flex w-full flex-col">
                     {post?.user?.id === session?.user?.id && (
                       <>
                         {" "}
                         <button
                           type="button"
-                          className="inline-flex justify-center border  px-4 py-2 text-sm  font-medium text-red-500 focus:outline-none focus:ring-0 "
+                          className="inline-flex justify-center border-b  px-4 py-2 text-sm  font-medium text-red-500 focus:outline-none focus:ring-0 "
                           onClick={() => {
                             setIsOpenDelete(true);
                             closeModal();
@@ -69,7 +69,7 @@ function PostActionButtonsModal({
                         </button>
                         <button
                           type="button"
-                          className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                          className="inline-flex justify-center border-b  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-white"
                           onClick={closeModal}
                         >
                           Edit
@@ -78,7 +78,7 @@ function PostActionButtonsModal({
                     )}
                     <button
                       type="button"
-                      className="inline-flex justify-center border  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center border-b  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-white"
                       onClick={() => {
                         navigator.clipboard.writeText(
                           `${env.NEXT_PUBLIC_URL}/p/${post.id}`
@@ -91,14 +91,14 @@ function PostActionButtonsModal({
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center border-b   px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-white"
                     >
                       <Link href={`/p/${post.id}`}>Go to post</Link>
                     </button>
                     {post?.user?.id !== session?.user?.id && (
                       <button
                         type="button"
-                        className="inline-flex justify-center border  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                        className="inline-flex justify-center border-b  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-white "
                         onClick={handleFavorite}
                       >
                         {hasFavored ? "Remove from" : "Add to "} favorites
@@ -106,7 +106,7 @@ function PostActionButtonsModal({
                     )}
                     <button
                       type="button"
-                      className="inline-flex justify-center  border px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 "
+                      className="inline-flex justify-center  px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-0 dark:text-white"
                       onClick={closeModal}
                     >
                       Cancel
