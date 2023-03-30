@@ -19,7 +19,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocal from "dayjs/plugin/updateLocale";
 import { BsChat, BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoPaperPlaneOutline } from "react-icons/io5";
-import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import SinglePostSkeleton from "../../components/Home/Posts/SinglePostSkeleton";
 import { useState } from "react";

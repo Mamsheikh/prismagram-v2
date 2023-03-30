@@ -12,7 +12,7 @@ export default function MyModal({
   closeModal: () => void;
 }) {
   const [username, setUsername] = useState("");
-  const { data, isLoading, isFetching } = api.user.searchUsers.useQuery(
+  const { data, isFetching } = api.user.searchUsers.useQuery(
     {
       searchUsername: username,
     },
@@ -76,11 +76,11 @@ export default function MyModal({
                                   className="h-10 w-10 rounded-full object-cover"
                                   alt={` profile photo`}
                                 />
-                                <div className="flex flex-col">
-                                  <span className="ml-2 font-semibold">
+                                <div className="flex  w-[100px] flex-col">
+                                  <span className="ml-2 truncate  font-semibold">
                                     {user.username}
                                   </span>
-                                  <span className="ml-2 truncate text-xs text-gray-400">
+                                  <span className="ml-2 flex-shrink-0  text-xs text-gray-400">
                                     {user.name}
                                   </span>
                                 </div>
