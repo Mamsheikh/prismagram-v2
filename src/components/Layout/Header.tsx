@@ -14,6 +14,8 @@ import CreatePostModal from "../Home/Posts/CreatePostModal";
 import Dropdown from "../common/ProfileDropdown";
 import { useEffect, useState } from "react";
 import SearchUsersModal from "../User/SearchUsersModal";
+import { signOut } from "next-auth/react";
+// import { Switch } from "@headlessui/react";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -28,13 +30,16 @@ const Header: React.FC<HeaderProps> = ({
   openModal,
   session,
 }) => {
-  const { systemTheme, theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  // const [enabled, setEnabled] = useState(false);
+  // const currentTheme = theme === "system" ? systemTheme : theme;
 
   function openModalSearch() {
     setIsOpenSearch(true);
+    setIsMenuOpen(false);
   }
 
   function closeModalSearch() {
@@ -77,7 +82,10 @@ const Header: React.FC<HeaderProps> = ({
             <AiOutlineHome className="navBtn" />
           </Link>
 
-          <AiOutlineMenu className="h-6 md:hidden" />
+          <AiOutlineMenu
+            className="h-6 dark:text-white md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          />
           {mounted && (
             <div
               onClick={() =>
@@ -132,6 +140,48 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </div>
+      <nav
+        className={`${
+          isMenuOpen ? "block" : "hidden"
+        }  flex flex-col items-center justify-center space-y-3 border-t py-4 md:hidden lg:hidden`}
+      >
+        {/* <div className="py-4">
+          <Switch
+            checked={enabled}
+            onChange={setEnabled}
+            className={`${enabled ? "bg-teal-900" : "bg-gray-100"}
+          relative inline-flex h-[28px] w-[64px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+          >
+            <span className="sr-only">Use setting</span>
+            <span
+              aria-hidden="true"
+              className={`${enabled ? "translate-x-9" : "translate-x-0"}
+            pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            />
+          </Switch>
+        </div> */}
+        <button
+          className="w-full max-w-[15rem] rounded bg-blue-500 px-3 py-2 text-white"
+          onClick={() =>
+            theme == "dark" ? setTheme("light") : setTheme("dark")
+          }
+        >
+          Toggle Darkmode
+        </button>
+        <button
+          onClick={openModalSearch}
+          className=" flex w-full max-w-[10rem] items-center rounded-lg border  bg-gray-100 py-2 pl-2 text-sm dark:bg-gray-800  "
+        >
+          <AiOutlineSearch className="mr-4 h-4 w-4 " />
+          Search
+        </button>
+        <button
+          className="w-full max-w-[15rem] rounded bg-blue-500 px-3 py-2 text-white"
+          onClick={() => signOut()}
+        >
+          Logout
+        </button>
+      </nav>
       <CreatePostModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
